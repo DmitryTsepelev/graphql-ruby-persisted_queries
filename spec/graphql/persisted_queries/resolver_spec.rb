@@ -15,9 +15,12 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
     end
     let(:query) { "query { user }" }
     let(:query_str) { query }
-    let(:hash) { Digest::SHA256.hexdigest(query_str) }
+    let(:hash_generator_proc) { proc { |value| Digest::SHA256.hexdigest(value) } }
+    let(:hash) { hash_generator_proc.call(query) }
 
-    subject { described_class.new(extensions, store).resolve(query_str) }
+    subject do
+      described_class.new(extensions, store, hash_generator_proc).resolve(query_str)
+    end
 
     context "when hash is nil" do
       it { is_expected.to eq(query) }
@@ -49,7 +52,6 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
 
       context "when query_str is not provided" do
         let(:query_str) { nil }
-        let(:hash) { Digest::SHA256.hexdigest(query) }
 
         it { is_expected.to eq(query) }
 
