@@ -43,17 +43,7 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
-4. Configure store if needed (`memory` is a default, `redis` is also supported)
-
-```ruby
-class GraphqlSchema < GraphQL::Schema
-  use GraphQL::PersistedQueries,
-      store: :redis,
-      redis_url: ENV["REDIS_URL"]
-end
-```
-
-5. Pass `:extensions` argument to all calls of `GraphqlSchema#execute` (start with `GraphqlController` and `GraphqlChannel`)
+4. Pass `:extensions` argument to all calls of `GraphqlSchema#execute` (start with `GraphqlController` and `GraphqlChannel`)
 
 ```ruby
 GraphqlSchema.execute(
@@ -65,7 +55,37 @@ GraphqlSchema.execute(
 )
 ```
 
-6. Run the app! 🔥
+5. Run the app! 🔥
+
+## Alternative stores
+
+All the queries are stored in memory by default, but you can easily switch to _redis_:
+
+```ruby
+class GraphqlSchema < GraphQL::Schema
+  use GraphQL::PersistedQueries, store: :redis, redis_url: ENV["MY_REDIS_URL"]
+end
+```
+
+If you have `ENV["REDIS_URL"]` configured – you don't need to pass it explicitly. Also, you can pass `:redis_host`, `:redis_port` and `:redis_db_name` to build the URL from scratch or configure Redis client as you want and pass it as the `:client` option.
+
+## Alternative hash functions
+
+[apollo-link-persisted-queries](https://github.com/apollographql/apollo-link-persisted-queries) uses _SHA256_ by default so this gem uses it as a default too, but if you want to override it – you can use `:hash_generator` option:
+
+```ruby
+class GraphqlSchema < GraphQL::Schema
+  use GraphQL::PersistedQueries, hash_generator: :md5
+end
+```
+
+If string or symbol is passed – the gem would try to find the class in the `Digest` namespace. Altenatively, you  can pass a lambda, e.g.:
+
+```ruby
+class GraphqlSchema < GraphQL::Schema
+  use GraphQL::PersistedQueries, hash_generator: proc { |_value| "super_safe_hash!!!" }
+end
+```
 
 ## Contributing
 

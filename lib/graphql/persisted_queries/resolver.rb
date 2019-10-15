@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "digest"
-
 module GraphQL
   module PersistedQueries
     # Fetches or stores query string in the storage
@@ -20,9 +18,10 @@ module GraphQL
         end
       end
 
-      def initialize(extensions, store)
+      def initialize(extensions, store, hash_generator_proc)
         @extensions = extensions
         @store = store
+        @hash_generator_proc = hash_generator_proc
       end
 
       def resolve(query_str)
@@ -41,7 +40,7 @@ module GraphQL
       private
 
       def persist_query(query_str)
-        raise WrongHash if Digest::SHA256.hexdigest(query_str) != hash
+        raise WrongHash if @hash_generator_proc.call(query_str) != hash
 
         @store.save_query(hash, query_str)
       end
