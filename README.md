@@ -5,7 +5,7 @@
 
 - 🗑**Heavy query parameter will be omitted in most of cases** – network requests will become less heavy
 - 🤝**Clients share cached queries** – it's enough to miss cache only once for each unique query
-- 🎅**Works with clients without persisted query support**
+- 🎅**Works for clients without persisted query support**
 
 
 <p align="center">
@@ -51,7 +51,7 @@ GraphqlSchema.execute(
   variables: ensure_hash(params[:variables]),
   context: {},
   operation_name: params[:operationName],
-  extensions: params[:extensions]
+  extensions: ensure_hash(params[:extensions])
 )
 ```
 
@@ -86,6 +86,10 @@ class GraphqlSchema < GraphQL::Schema
   use GraphQL::PersistedQueries, hash_generator: proc { |_value| "super_safe_hash!!!" }
 end
 ```
+
+## GET requests and HTTP cache
+
+Using `GET` requests for persisted queries allows you to enable HTTP caching (e.g., turn on CDN). In order to make it work you should change the way link is initialized on front-end side (`createPersistedQueryLink({ useGETForHashedQueries: true })`) and register a new route `get "/graphql", to: "graphql#execute"`.
 
 ## Contributing
 
