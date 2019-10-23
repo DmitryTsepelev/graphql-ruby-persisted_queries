@@ -63,11 +63,27 @@ All the queries are stored in memory by default, but you can easily switch to _r
 
 ```ruby
 class GraphqlSchema < GraphQL::Schema
-  use GraphQL::PersistedQueries, store: :redis, redis_url: ENV["MY_REDIS_URL"]
+  use GraphQL::PersistedQueries, store: :redis, redis_client: { redis_url: ENV["MY_REDIS_URL"] }
 end
 ```
 
-If you have `ENV["REDIS_URL"]` configured – you don't need to pass it explicitly. Also, you can pass `:redis_host`, `:redis_port` and `:redis_db_name` to build the URL from scratch or configure Redis client as you want and pass it as the `:client` option.
+If you have `ENV["REDIS_URL"]` configured – you don't need to pass it explicitly. Also, you can pass `:redis_host`, `:redis_port` and `:redis_db_name` inside the `:redis_client` hash to build the URL from scratch or pass the configured `Redis` or `ConnectionPool` object:
+
+```ruby
+class GraphqlSchema < GraphQL::Schema
+  use GraphQL::PersistedQueries,
+      store: :redis,
+      redis_client: { redis_host: "127.0.0.2", redis_port: "2214", redis_db_name: "7" }
+  # or
+  use GraphQL::PersistedQueries,
+      store: :redis,
+      redis_client: Redis.new(url: "redis://127.0.0.2:2214/7")
+  # or
+  use GraphQL::PersistedQueries,
+      store: :redis,
+      redis_client: ConnectionPool.new { Redis.new(url: "redis://127.0.0.2:2214/7") }
+end
+```
 
 ## Alternative hash functions
 
