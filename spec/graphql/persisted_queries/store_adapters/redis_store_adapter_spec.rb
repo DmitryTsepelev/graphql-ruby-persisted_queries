@@ -3,95 +3,51 @@
 require "spec_helper"
 
 require "redis"
+require "connection_pool"
 
 RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisStoreAdapter do
-  describe "#initialize" do
-    let(:options) { {} }
+  subject { described_class.new(redis_client: redis_client) }
 
-    subject { described_class.new(options) }
+  context "when Hash instance is passed" do
+    let(:redis_client) { { redis_url: "redis://127.0.0.3:8791/3" } }
 
-    context "when client is passed" do
-      let(:options) { { client: Redis.new(url: "redis://127.0.0.3:8791/3") } }
-
-      it "uses client" do
-        expect(subject.storage.connection[:id]).to eq("redis://127.0.0.3:8791/3")
-      end
-
-      context "when passed along with other parameters" do
-        let(:options) do
-          {
-            client: Redis.new(url: "redis://127.0.0.3:8791/3"),
-            redis_url: "redis://127.0.0.1:6379",
-            redis_host: "127.0.0.1",
-            redis_port: "6379",
-            redis_db_name: "0"
-          }
-        end
-
-        it "raises error" do
-          expect { subject }.to raise_error(
-            ArgumentError,
-            "client cannot be passed along with redis_url, redis_host, " \
-            "redis_port or redis_db_name options"
-          )
-        end
-      end
+    it "wraps with proc" do
+      expect(subject.instance_variable_get("@redis_proc")).to be_kind_of(Proc)
     end
+  end
 
-    context "when redis_host, redis_port and redis_db_name are passed" do
-      let(:options) do
-        { redis_host: "127.0.0.2", redis_port: "2214", redis_db_name: "7" }
-      end
+  context "when Proc instance is passed" do
+    let(:redis_client) { proc {} }
 
-      it "builds redis URL" do
-        expect(subject.storage.connection[:id]).to eq("redis://127.0.0.2:2214/7")
-      end
+    it "wraps with proc" do
+      expect(subject.instance_variable_get("@redis_proc")).to be_kind_of(Proc)
     end
+  end
 
-    context "when REDIS_URL is configured" do
-      let(:redis_url) { "redis://127.0.0.1:6379" }
+  context "when Redis instance is passed" do
+    let(:redis_client) { Redis.new(url: "redis://127.0.0.3:8791/3") }
 
-      before do
-        allow(ENV).to receive(:[]).with("REDIS_URL").and_return(redis_url)
-      end
-
-      it "uses default db" do
-        expect(subject.storage.connection[:id]).to eq("redis://127.0.0.1:6379/0")
-      end
-
-      context "when redis_db_name is configured" do
-        let(:options) { { redis_db_name: "42" } }
-
-        it "uses configured db" do
-          expect(subject.storage.connection[:id]).to eq("redis://127.0.0.1:6379/42")
-        end
-      end
+    it "wraps with proc" do
+      expect(subject.instance_variable_get("@redis_proc")).to be_kind_of(Proc)
     end
+  end
 
-    context "when redis_url is passed" do
-      let(:options) { { redis_url: "redis://127.0.0.4:2177/22" } }
+  context "when ConnectionPool instance is passed" do
+    let(:redis_client) { ConnectionPool.new { Redis.new(url: "redis://127.0.0.3:8791/3") } }
 
-      it "uses passed redis_url" do
-        expect(subject.storage.connection[:id]).to eq("redis://127.0.0.4:2177/22")
-      end
+    it "wraps with proc" do
+      expect(subject.instance_variable_get("@redis_proc")).to be_kind_of(Proc)
+    end
+  end
 
-      context "when passed along with other parameters" do
-        let(:options) do
-          {
-            redis_url: "redis://127.0.0.1:6379",
-            redis_host: "127.0.0.1",
-            redis_port: "6379",
-            redis_db_name: "0"
-          }
-        end
+  context "when not supported object is passed" do
+    let(:redis_client) { 42 }
 
-        it "raises error" do
-          expect { subject }.to raise_error(
-            ArgumentError,
-            "redis_url cannot be passed along with redis_host, redis_port or redis_db_name options"
-          )
-        end
-      end
+    it "raises error" do
+      expect { subject }.to raise_error(
+        ArgumentError,
+        ":redis_client accepts Redis, ConnectionPool, Hash or Proc only"
+      )
     end
   end
 end
