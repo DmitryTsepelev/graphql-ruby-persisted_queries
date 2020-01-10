@@ -6,7 +6,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisClientBuilder do
   describe "#initialize" do
     let(:options) { {} }
 
-    subject { described_class.new(options).build }
+    subject { described_class.new(**options).build }
 
     context "when redis_host, redis_port and redis_db_name are passed" do
       let(:options) do
