@@ -85,6 +85,18 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
+You can also pass options for expiration and namespace to override the defaults:
+
+```ruby
+class GraphqlSchema < GraphQL::Schema
+  use GraphQL::PersistedQueries,
+      store: :redis,
+      redis_client: { redis_url: ENV["MY_REDIS_URL"] },
+      expiration: 172800, # optional, default is 24 hours
+      namespace: "my-custom-namespace" # optional, default is "graphql-persisted-query"
+end
+```
+
 ## Alternative hash functions
 
 [apollo-link-persisted-queries](https://github.com/apollographql/apollo-link-persisted-queries) uses _SHA256_ by default so this gem uses it as a default too, but if you want to override it – you can use `:hash_generator` option:
