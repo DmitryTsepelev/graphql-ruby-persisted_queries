@@ -7,8 +7,13 @@ module GraphQL
     module StoreAdapters
       # Redis adapter for storing persisted queries
       class RedisStoreAdapter < BaseStoreAdapter
-        def initialize(redis_client:)
+        DEFAULT_EXPIRATION = 24 * 60 * 60
+        DEFAULT_NAMESPACE = "graphql-persisted-query"
+
+        def initialize(redis_client:, expiration: DEFAULT_EXPIRATION, namespace: DEFAULT_NAMESPACE)
           @redis_proc = build_redis_proc(redis_client)
+          @expiration = expiration
+          @namespace = namespace
         end
 
         def fetch_query(hash)
@@ -16,13 +21,13 @@ module GraphQL
         end
 
         def save_query(hash, query)
-          @redis_proc.call { |redis| redis.set(key_for(hash), query, ex: 24 * 60 * 60) }
+          @redis_proc.call { |redis| redis.set(key_for(hash), query, ex: @expiration) }
         end
 
         private
 
         def key_for(hash)
-          "graphql-persisted-query:#{hash}"
+          [@namespace, hash].join(":")
         end
 
         # rubocop: disable Metrics/MethodLength
