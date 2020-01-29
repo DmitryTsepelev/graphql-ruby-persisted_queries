@@ -8,9 +8,11 @@ module GraphQL
   # Plugin definition
   module PersistedQueries
     def self.use(schema_defn, store: :memory, hash_generator: :sha256, **options)
-      schema_defn.target.singleton_class.prepend(SchemaPatch)
-      schema_defn.target.hash_generator = hash_generator
-      schema_defn.target.configure_persisted_query_store(store, options)
+      schema = schema_defn.is_a?(Class) ? schema_defn : schema_defn.target
+
+      schema.singleton_class.prepend(SchemaPatch)
+      schema.hash_generator = hash_generator
+      schema.configure_persisted_query_store(store, options)
     end
   end
 end

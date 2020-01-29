@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#13](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/13) Support `graphql-ruby` 1.10 ([@DmitryTsepelev][])
+
 ## 0.1.1 (2019-10-24)
 
 - [PR#7](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/7) Improved Redis configuration – added `Proc` and `ConnectionPool` support ([@DmitryTsepelev][])

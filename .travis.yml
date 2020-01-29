@@ -11,6 +11,7 @@ rvm:
 gemfile:
   - gemfiles/graphql_1_8.gemfile
   - gemfiles/graphql_1_9.gemfile
+  - gemfiles/graphql_1_10.gemfile
   - gemfiles/graphql_master.gemfile
 
 
@@ -19,3 +20,5 @@ notifications:
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - rvm: ruby-head
