@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "graphql/persisted_queries/error_handlers"
 require "graphql/persisted_queries/schema_patch"
 require "graphql/persisted_queries/store_adapters"
 require "graphql/persisted_queries/version"
