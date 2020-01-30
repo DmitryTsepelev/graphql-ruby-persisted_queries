@@ -11,10 +11,11 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisStoreAdapter do
   let(:expiration) { nil }
   let(:namespace) { nil }
   let(:options) do
-    { redis_client: redis_client }.tap do |options|
-      options[:expiration] = expiration if expiration
-      options[:namespace] = namespace if namespace
-    end
+    {
+      redis_client: redis_client,
+      expiration: expiration,
+      namespace: namespace
+    }
   end
 
   context "when Hash instance is passed" do
