@@ -10,10 +10,10 @@ module GraphQL
         DEFAULT_EXPIRATION = 24 * 60 * 60
         DEFAULT_NAMESPACE = "graphql-persisted-query"
 
-        def initialize(redis_client:, expiration: DEFAULT_EXPIRATION, namespace: DEFAULT_NAMESPACE)
+        def initialize(redis_client:, expiration: nil, namespace: nil)
           @redis_proc = build_redis_proc(redis_client)
-          @expiration = expiration
-          @namespace = namespace
+          @expiration = expiration || DEFAULT_EXPIRATION
+          @namespace = namespace || DEFAULT_NAMESPACE
         end
 
         def fetch_query(hash)
@@ -27,7 +27,7 @@ module GraphQL
         private
 
         def key_for(hash)
-          [@namespace, hash].join(":")
+          "#{@namespace}:#{hash}"
         end
 
         # rubocop: disable Metrics/MethodLength
