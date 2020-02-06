@@ -77,23 +77,35 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       end
     end
 
+    let(:schema) do
+      # Ensure plugins are loaded early enough for version <= 1.10
+      if Gem::Dependency.new("graphql", "<= 1.10.0").match?("graphql", GraphQL::VERSION)
+        GraphqlSchema.graphql_definition
+      else
+        GraphqlSchema
+      end
+    end
+
     around do |test|
-      original_store = GraphqlSchema.persisted_query_store
-      GraphqlSchema.configure_persisted_query_store(UnavailableStore.new({}), {})
-      test.run
-      GraphqlSchema.configure_persisted_query_store(original_store, {})
+      original_store = schema.persisted_query_store
+      schema.configure_persisted_query_store(UnavailableStore.new({}), {})
+      begin
+        test.run
+      ensure
+        schema.configure_persisted_query_store(original_store, {})
+      end
     end
 
     it "calls the error handler" do
       # rubocop: disable Lint/HandleExceptions
       begin
-        perform_request
+        schema.execute(query, extensions: { "persistedQuery" => { "sha256Hash" => sha256 } })
       rescue RuntimeError
         # Ignore the expected error
       end
       # rubocop: enable Lint/HandleExceptions
 
-      expect(GraphqlSchema.persisted_query_error_handler.last_handled_error).to be_a(RuntimeError)
+      expect(schema.persisted_query_error_handler.last_handled_error).to be_a(RuntimeError)
     end
   end
 end
