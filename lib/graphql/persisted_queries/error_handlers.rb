@@ -10,9 +10,19 @@ module GraphQL
       def self.build(handler, options = nil)
         if handler.is_a?(ErrorHandlers::BaseErrorHandler)
           handler
+        elsif handler.is_a?(Proc)
+          build_from_proc(handler)
         else
           build_by_name(handler, options)
         end
+      end
+
+      def self.build_from_proc(proc)
+        if proc.arity != 1
+          raise ArgumentError, "proc passed to :error_handler should have exactly one argument"
+        end
+
+        proc
       end
 
       def self.build_by_name(name, options)

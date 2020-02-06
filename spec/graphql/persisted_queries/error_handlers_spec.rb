@@ -15,6 +15,24 @@ RSpec.describe GraphQL::PersistedQueries::ErrorHandlers do
       it { is_expected.to be(handler) }
     end
 
+    context "when proc is passed" do
+      let(:handler) do
+        ->(error) { raise error }
+      end
+
+      it { is_expected.to be(handler) }
+
+      context "with wrong number of arguments" do
+        let(:handler) do
+          ->(error, more) { raise error, more }
+        end
+
+        it "raises error" do
+          expect { subject }.to raise_error(ArgumentError)
+        end
+      end
+    end
+
     context "when name is passed" do
       let(:handler) { :default }
 
