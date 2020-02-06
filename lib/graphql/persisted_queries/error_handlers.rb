@@ -26,9 +26,7 @@ module GraphQL
       end
 
       def self.build_by_name(name, options)
-        camelized_handler = name.to_s.split("_").map(&:capitalize).join
-        handler_class_name = "#{camelized_handler}ErrorHandler"
-        ErrorHandlers.const_get(handler_class_name).new(options || {})
+        const_get("#{BuilderHelpers.camelize(name)}ErrorHandler").new(options || {})
       rescue NameError => e
         raise e.class, "Persisted query error handler for :#{name} haven't been found", e.backtrace
       end

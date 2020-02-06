@@ -17,9 +17,7 @@ module GraphQL
       end
 
       def self.build_by_name(name, options)
-        camelized_adapter = name.to_s.split("_").map(&:capitalize).join
-        adapter_class_name = "#{camelized_adapter}StoreAdapter"
-        StoreAdapters.const_get(adapter_class_name).new(options || {})
+        const_get("#{BuilderHelpers.camelize(name)}StoreAdapter").new(options || {})
       rescue NameError => e
         raise e.class, "Persisted query store adapter for :#{name} haven't been found", e.backtrace
       end
