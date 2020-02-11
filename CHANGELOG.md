@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#17](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/17) Allow an optional custom error handler so that implementors can control failure scenarios when query resolution fails ([@bmorton][])
+
 ## 0.1.3 (2020-01-30)
 
 - [PR#15](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/15) Allow optional custom expiration and namespace for Redis store ([@bmorton][])

@@ -7,10 +7,14 @@ module GraphQL
   module PersistedQueries
     # Patches GraphQL::Schema to support persisted queries
     module SchemaPatch
-      attr_reader :persisted_query_store, :hash_generator_proc
+      attr_reader :persisted_query_store, :hash_generator_proc, :persisted_query_error_handler
 
       def configure_persisted_query_store(store, options)
         @persisted_query_store = StoreAdapters.build(store, options)
+      end
+
+      def configure_persisted_query_error_handler(handler)
+        @persisted_query_error_handler = ErrorHandlers.build(handler)
       end
 
       def hash_generator=(hash_generator)
@@ -19,7 +23,8 @@ module GraphQL
 
       def execute(query_str = nil, **kwargs)
         if (extensions = kwargs.delete(:extensions))
-          resolver = Resolver.new(extensions, persisted_query_store, hash_generator_proc)
+          resolver = Resolver.new(extensions, persisted_query_store, hash_generator_proc,
+                                  persisted_query_error_handler)
           query_str = resolver.resolve(query_str)
         end
 
