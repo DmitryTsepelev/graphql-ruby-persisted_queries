@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.2.0 (2020-02-11)
+
 - [PR#17](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/17) Allow an optional custom error handler so that implementors can control failure scenarios when query resolution fails ([@bmorton][])
 
 ## 0.1.3 (2020-01-30)
