@@ -13,6 +13,20 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
     end
   end
 
+  TestTracer = Class.new do
+    attr_reader :events
+
+    def initialize
+      @events = Hash.new { |hash, key| hash[key] = [] }
+    end
+
+    def trace(key, value)
+      result = yield
+      @events[key] << {metadata: value, result: result}
+      result
+    end
+  end
+
   GraphqlSchema = Class.new(GraphQL::Schema) do
     use GraphQL::PersistedQueries
 
@@ -39,7 +53,15 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
   end
 
   context "when cache is warm" do
-    before { perform_request }
+    around do |test|
+      original = GraphqlSchema.send(:own_tracers)
+      @tracer = TestTracer.new
+
+      GraphqlSchema.tracer(@tracer)
+      perform_request
+      test.run
+      GraphqlSchema.instance_variable_set(:@own_tracers, original)
+    end
 
     let(:query) do
       <<-GQL
@@ -51,6 +73,10 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
 
     it "returns data" do
       expect(response["data"]).to eq("someData" => "some value")
+    end
+
+    it "emits a tracing event" do
+      expect(@tracer.events["persist_query"]).to eq([{metadata: {hash: sha256}, result: query}])
     end
   end
 end

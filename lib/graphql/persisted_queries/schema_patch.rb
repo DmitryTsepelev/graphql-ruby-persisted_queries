@@ -19,7 +19,7 @@ module GraphQL
 
       def execute(query_str = nil, **kwargs)
         if (extensions = kwargs.delete(:extensions))
-          resolver = Resolver.new(extensions, persisted_query_store, hash_generator_proc)
+          resolver = Resolver.new(extensions, persisted_query_store, hash_generator_proc, tracers: tracers)
           query_str = resolver.resolve(query_str)
         end
 
