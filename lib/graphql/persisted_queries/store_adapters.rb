@@ -3,6 +3,7 @@
 require "graphql/persisted_queries/store_adapters/base_store_adapter"
 require "graphql/persisted_queries/store_adapters/memory_store_adapter"
 require "graphql/persisted_queries/store_adapters/redis_store_adapter"
+require "graphql/persisted_queries/store_adapters/redis_with_local_cache_store_adapter"
 
 module GraphQL
   module PersistedQueries
