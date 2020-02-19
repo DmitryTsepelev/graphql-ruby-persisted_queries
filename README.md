@@ -144,11 +144,17 @@ end
 
 ## GET requests and HTTP cache
 
-Using `GET` requests for persisted queries allows you to enable HTTP caching (e.g., turn on CDN). In order to make it work you should change the way link is initialized on front-end side (`createPersistedQueryLink({ useGETForHashedQueries: true })`) and register a new route `get "/graphql", to: "graphql#execute"`.
+Using `GET` requests for persisted queries allows you to enable HTTP caching (e.g., turn on CDN). This is how to turn them on:
+1. Change the way link is initialized on front-end side (`createPersistedQueryLink({ useGETForHashedQueries: true })`);
+2. Register a new route `get "/graphql", to: "graphql#execute"`;
+3. Put the request object to the GraphQL context in the controller `GraphqlSchema.execute(query, variables: variables, context: { request: request })`;
+4. Turn the `verify_http_method` option on (`use GraphQL::PersistedQueries, verify_http_method: true`) to enforce using `POST` requests for performing mutations (otherwise the error `Mutations cannot be performed via HTTP GET` will be returned).
+
+HTTP method verification is important, because when mutations are allowed via `GET` requests, it's easy to perform an attack by sending the link containing mutation to a signed in user.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/DmitryTsepelev/graphql-persisted_queries.
+Bug reports and pull requests are welcome on GitHub at https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries.
 
 ## License
 

@@ -21,6 +21,18 @@ module GraphQL
         @hash_generator_proc = HashGeneratorBuilder.new(hash_generator).build
       end
 
+      def verify_http_method=(verify)
+        return unless verify
+
+        analyzer = HttpMethodAnalyzer.new
+
+        if Gem::Dependency.new("graphql", ">= 1.10.0").match?("graphql", GraphQL::VERSION)
+          query_analyzer(analyzer)
+        else
+          query_analyzers << analyzer
+        end
+      end
+
       def execute(query_str = nil, **kwargs)
         if (extensions = kwargs.delete(:extensions))
           resolver = Resolver.new(extensions, persisted_query_store, hash_generator_proc,

@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#22](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/22) Add `verify_http_method` option restricting mutations to be performed via `GET` requests ([@DmitryTsepelev][])
+
 ## 0.2.0 (2020-02-11)
 
 - [PR#17](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/17) Allow an optional custom error handler so that implementors can control failure scenarios when query resolution fails ([@bmorton][])
