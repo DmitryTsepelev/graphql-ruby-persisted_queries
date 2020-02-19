@@ -97,6 +97,14 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
+### Supported stores
+
+We currently support a few different stores that can be configured out of the box:
+
+- `:memory`: This is the default in-memory store and is great for getting started, but will require each instance to cache results independently which can result in lots of ["new query path"](https://blog.apollographql.com/improve-graphql-performance-with-automatic-persisted-queries-c31d27b8e6ea) requests.
+- `:redis`: This store will allow you to share a Redis cache across all instances of your GraphQL application so that each instance doesn't have to ask the client for the query again if it hasn't seen it yet.
+- `:redis_with_local_cache`: This store combines both the `:memory` and `:redis` approaches so that we can reduce the number of network requests we make while mitigating the independent cache issue.  This adapter is configured identically to the `:redis` store.
+
 ## Alternative hash functions
 
 [apollo-link-persisted-queries](https://github.com/apollographql/apollo-link-persisted-queries) uses _SHA256_ by default so this gem uses it as a default too, but if you want to override it – you can use `:hash_generator` option:
