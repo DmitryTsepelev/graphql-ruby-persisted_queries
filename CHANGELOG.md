@@ -2,6 +2,7 @@
 
 ## master
 
+- [PR#23](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/23) Adapter for Redis-backed in-memory store ([@bmorton][])
 - [PR#22](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/22) Add `verify_http_method` option restricting mutations to be performed via `GET` requests ([@DmitryTsepelev][])
 
 ## 0.2.0 (2020-02-11)
