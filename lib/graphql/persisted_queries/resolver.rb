@@ -18,11 +18,9 @@ module GraphQL
         end
       end
 
-      def initialize(extensions, store, hash_generator_proc, error_handler)
+      def initialize(extensions, schema)
         @extensions = extensions
-        @store = store
-        @hash_generator_proc = hash_generator_proc
-        @error_handler = error_handler
+        @schema = schema
       end
 
       def resolve(query_str)
@@ -31,7 +29,7 @@ module GraphQL
         if query_str
           persist_query(query_str)
         else
-          query_str = with_error_handling { @store.fetch_query(hash) }
+          query_str = with_error_handling { @schema.persisted_query_store.fetch_query(hash) }
           raise NotFound if query_str.nil?
         end
 
@@ -43,13 +41,13 @@ module GraphQL
       def with_error_handling
         yield
       rescue StandardError => e
-        @error_handler.call(e)
+        @schema.persisted_query_error_handler.call(e)
       end
 
       def persist_query(query_str)
-        raise WrongHash if @hash_generator_proc.call(query_str) != hash
+        raise WrongHash if @schema.hash_generator_proc.call(query_str) != hash
 
-        with_error_handling { @store.save_query(hash, query_str) }
+        with_error_handling { @schema.persisted_query_store.save_query(hash, query_str) }
       end
 
       def hash
