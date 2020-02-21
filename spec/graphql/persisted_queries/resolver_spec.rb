@@ -8,10 +8,10 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
   describe "#resolve" do
     let(:extensions) { {} }
     let(:store) do
-      store = double("TestStore")
-      allow(store).to receive(:save_query)
-      allow(store).to receive(:fetch_query).and_return(query)
-      store
+      double("TestStore").tap do |store|
+        allow(store).to receive(:save_query)
+        allow(store).to receive(:fetch_query).and_return(query)
+      end
     end
     let(:query) { "query { user }" }
     let(:query_str) { query }
@@ -19,8 +19,16 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
     let(:hash) { hash_generator_proc.call(query) }
     let(:error_handler) { GraphQL::PersistedQueries::ErrorHandlers::DefaultErrorHandler.new({}) }
 
+    let(:schema) do
+      double("TestSchema").tap do |schema|
+        allow(schema).to receive(:persisted_query_store).and_return(store)
+        allow(schema).to receive(:hash_generator_proc).and_return(hash_generator_proc)
+        allow(schema).to receive(:persisted_query_error_handler).and_return(error_handler)
+      end
+    end
+
     subject do
-      described_class.new(extensions, store, hash_generator_proc, error_handler).resolve(query_str)
+      described_class.new(extensions, schema).resolve(query_str)
     end
 
     context "when extensions hash is empty" do
