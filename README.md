@@ -57,6 +57,10 @@ GraphqlSchema.execute(
 
 5. Run the app! 🔥
 
+## Usage with BatchLink
+
+It's possible to group queries using [batch-link](https://www.apollographql.com/docs/link/links/batch-http/) and send them as a single HTTP request. In this case you need to use `GraphqlSchema.multiplex(queries)` instead of `#execute`. The gem supports it too, no action required!
+
 ## Alternative stores
 
 All the queries are stored in memory by default, but you can easily switch to _redis_:

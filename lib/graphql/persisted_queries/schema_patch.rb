@@ -2,11 +2,19 @@
 
 require "graphql/persisted_queries/hash_generator_builder"
 require "graphql/persisted_queries/resolver"
+require "graphql/persisted_queries/multiplex_resolver"
 
 module GraphQL
   module PersistedQueries
     # Patches GraphQL::Schema to support persisted queries
     module SchemaPatch
+      class << self
+        def patch(schema)
+          schema.singleton_class.class_eval { alias_method :multiplex_original, :multiplex }
+          schema.singleton_class.prepend(SchemaPatch)
+        end
+      end
+
       attr_reader :persisted_query_store, :hash_generator_proc, :persisted_query_error_handler
 
       def configure_persisted_query_store(store, options)
@@ -33,16 +41,8 @@ module GraphQL
         end
       end
 
-      def execute(query_str = nil, **kwargs)
-        if (extensions = kwargs.delete(:extensions))
-          resolver = Resolver.new(extensions, persisted_query_store, hash_generator_proc,
-                                  persisted_query_error_handler)
-          query_str = resolver.resolve(query_str)
-        end
-
-        super
-      rescue Resolver::NotFound, Resolver::WrongHash => e
-        { errors: [{ message: e.message }] }
+      def multiplex(queries, **kwargs)
+        MultiplexResolver.new(self, queries, kwargs).resolve
       end
     end
   end
