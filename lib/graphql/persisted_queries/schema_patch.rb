@@ -15,7 +15,8 @@ module GraphQL
         end
       end
 
-      attr_reader :persisted_query_store, :hash_generator_proc, :persisted_query_error_handler
+      attr_reader :persisted_query_store, :hash_generator_proc,
+        :persisted_query_error_handler, :persisted_query_squish
 
       def configure_persisted_query_store(store, options)
         @persisted_query_store = StoreAdapters.build(store, options)
@@ -23,6 +24,10 @@ module GraphQL
 
       def configure_persisted_query_error_handler(handler)
         @persisted_query_error_handler = ErrorHandlers.build(handler)
+      end
+
+      def configure_squish_queries(squish)
+        @persisted_query_squish = squish
       end
 
       def hash_generator=(hash_generator)

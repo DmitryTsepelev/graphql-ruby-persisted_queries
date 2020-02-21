@@ -46,8 +46,12 @@ module GraphQL
 
       def persist_query(query_str)
         raise WrongHash if @schema.hash_generator_proc.call(query_str) != hash
+        squished_query = @schema.persisted_query_squish ? squish_str(query_str) : query_str
+        with_error_handling { @schema.persisted_query_store.save_query(hash, squished_query) }
+      end
 
-        with_error_handling { @schema.persisted_query_store.save_query(hash, query_str) }
+      def squish_str(str)
+        str.dup.gsub(/[[:space:]]+/, " ").strip
       end
 
       def hash
