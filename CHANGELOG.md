@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#26](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/26) Add Memcached store ([@JanStevens][])
+
 ## 0.3.0 (2020-02-21)
 
 - [PR#24](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/24) Add multiplex support ([@DmitryTsepelev][])
