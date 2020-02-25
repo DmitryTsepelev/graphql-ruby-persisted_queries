@@ -10,11 +10,19 @@ module GraphQL
         end
 
         def fetch_query(hash)
-          @storage[hash]
+          @storage[hash].tap do |result|
+            if result
+              trace("fetch_query.cache_hit", adapter: :memory)
+            else
+              trace("fetch_query.cache_miss", adapter: :memory)
+            end
+          end
         end
 
         def save_query(hash, query)
-          @storage[hash] = query
+          trace("save_query", adapter: :memory) do
+            @storage[hash] = query
+          end
         end
       end
     end
