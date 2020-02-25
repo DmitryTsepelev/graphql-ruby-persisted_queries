@@ -14,6 +14,24 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
     end
   end
 
+  Tracer = Class.new do
+    attr_reader :events
+
+    def initialize
+      clear!
+    end
+
+    def trace(key, value)
+      result = yield
+      @events[key] << { metadata: value, result: result }
+      result
+    end
+
+    def clear!
+      @events = Hash.new { |hash, key| hash[key] = [] }
+    end
+  end
+
   let(:query) { "query { someData }" }
 
   let(:sha256) { Digest::SHA256.hexdigest(query) }
@@ -22,9 +40,20 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
     build_test_schema(error_handler: ErrorHandler.new({}))
   end
 
+  let(:tracer) { Tracer.new }
+
+  let(:schema_with_tracer) do
+    build_test_schema(error_handler: ErrorHandler.new({}), tracing: true, tracer: tracer)
+  end
+
   describe "#execute" do
-    def perform_request
-      schema.execute(query, extensions: { "persistedQuery" => { "sha256Hash" => sha256 } })
+    def perform_request(with_tracer: false, with_query: true)
+      current_schema = with_tracer ? schema_with_tracer : schema
+      selected_query = with_query ? query : nil
+      tracer.clear! if with_tracer
+
+      current_schema.execute(selected_query,
+                             extensions: { "persistedQuery" => { "sha256Hash" => sha256 } })
     end
 
     subject(:response) { perform_request }
@@ -36,13 +65,35 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       it "returns error" do
         expect(response["errors"]).to eq([{ "message" => "PersistedQueryNotFound" }])
       end
+
+      it "emits a cache miss" do
+        perform_request(with_tracer: true)
+        events = tracer.events["persisted_queries.fetch_query.cache_miss"]
+        expect(events).to eq([{ metadata: { adapter: :memory }, result: nil }])
+      end
+    end
+
+    context "when cache is populated" do
+      it "emits a query save event" do
+        perform_request(with_tracer: true, with_query: true)
+        events = tracer.events["persisted_queries.save_query"]
+        expect(events).to eq([{ metadata: { adapter: :memory }, result: query }])
+      end
     end
 
     context "when cache is warm" do
-      before { perform_request }
+      subject(:response) { perform_request(with_query: false) }
 
       it "returns data" do
+        perform_request
         expect(response["data"]).to eq("someData" => "some value")
+      end
+
+      it "emits a cache hit" do
+        perform_request(with_tracer: true)
+        perform_request(with_tracer: true, with_query: false)
+        events = tracer.events["persisted_queries.fetch_query.cache_hit"]
+        expect(events).to eq([{ metadata: { adapter: :memory }, result: nil }])
       end
     end
 
