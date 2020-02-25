@@ -126,7 +126,9 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
-You can also pass options for `expiration` and `namespace` to override the defaults and you can configure the Dalli `pool_size` and `compress` option:
+You can also pass options for `expiration` and `namespace` to override the defaults. 
+Any additional argument inside `dalli_client` will be forwarded to `Dalli::Client.new`. 
+Following example configures Dalli `pool_size` and `compress` options:
 
 ```ruby
 class GraphqlSchema < GraphQL::Schema
@@ -134,8 +136,8 @@ class GraphqlSchema < GraphQL::Schema
       store: :memcached,
       dalli_client: { 
         memcached_url: "127.0.0.2:11211", 
-        pool_size: 5, # default is 5
-        compress: true # default is true
+        pool_size: 5,
+        compress: true
       },
       expiration: 172800, # optional, default is 24 hours
       namespace: "my-custom-namespace" # optional, default is "graphql-persisted-query"

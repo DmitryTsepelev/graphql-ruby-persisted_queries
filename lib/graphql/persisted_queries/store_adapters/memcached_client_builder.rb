@@ -5,15 +5,13 @@ module GraphQL
     module StoreAdapters
       # Builds Redis object instance based on passed hash
       class MemcachedClientBuilder
-        def initialize(memcached_url: nil, memcached_host: nil, memcached_port: nil,
-                       pool_size: 5, compress: true)
+        def initialize(memcached_url: nil, memcached_host: nil, memcached_port: nil, **dalli_args)
           require "dalli"
 
           @memcached_url = memcached_url
           @memcached_host = memcached_host
           @memcached_port = memcached_port
-          @pool_size = pool_size
-          @compress = compress
+          @dalli_args = dalli_args
         rescue LoadError => e
           msg = "Could not load the 'dalli' gem, please add it to your gemfile or " \
                 "configure a different adapter, e.g. use GraphQL::PersistedQueries, store: :memory"
@@ -26,8 +24,7 @@ module GraphQL
                                  "memcached_port options"
           end
 
-          ::Dalli::Client.new(@memcached_url || build_memcached_url,
-                              pool_size: @pool_size, compress: @compress)
+          ::Dalli::Client.new(@memcached_url || build_memcached_url, **@dalli_args)
         end
 
         private
