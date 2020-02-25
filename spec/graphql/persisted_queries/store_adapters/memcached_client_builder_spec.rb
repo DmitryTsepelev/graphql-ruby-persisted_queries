@@ -15,8 +15,18 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedClientBuilder 
       end
 
       it "builds memcached URL" do
-        expect(::Dalli::Client).to receive(:new).with("127.0.0.2:11211",
-                                                      compress: true, pool_size: 5)
+        expect(::Dalli::Client).to receive(:new).with("127.0.0.2:11211", {})
+        subject
+      end
+    end
+
+    context "when additional arguments are given" do
+      let(:options) do
+        { memcached_host: "127.0.0.2", memcached_port: "11211", compress: true, pool_size: 5 }
+      end
+
+      it "delegats to dalli client" do
+        expect(::Dalli::Client).to receive(:new).with("127.0.0.2:11211", compress: true, pool_size: 5)
         subject
       end
     end
@@ -25,8 +35,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedClientBuilder 
       let(:options) { { memcached_url: "127.0.0.4:11211" } }
 
       it "uses passed memcached_url" do
-        expect(::Dalli::Client).to receive(:new).with("127.0.0.4:11211",
-                                                      compress: true, pool_size: 5)
+        expect(::Dalli::Client).to receive(:new).with("127.0.0.4:11211", {})
         subject
       end
 
