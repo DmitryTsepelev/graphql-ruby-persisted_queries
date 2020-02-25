@@ -26,7 +26,8 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedClientBuilder 
       end
 
       it "delegats to dalli client" do
-        expect(::Dalli::Client).to receive(:new).with("127.0.0.2:11211", compress: true, pool_size: 5)
+        expect(::Dalli::Client).to receive(:new).with("127.0.0.2:11211",
+                                                      compress: true, pool_size: 5)
         subject
       end
     end
