@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.4.0 (2020-02-26)
+
 - [PR#26](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/26) Add Memcached store ([@JanStevens][])
 
 ## 0.3.0 (2020-02-21)
@@ -32,3 +34,4 @@
 
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
 [@bmorton]: https://github.com/bmorton
+[@JanStevens]: https://github.com/JanStevens
