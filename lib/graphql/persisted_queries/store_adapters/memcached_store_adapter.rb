@@ -17,11 +17,23 @@ module GraphQL
         end
 
         def fetch_query(hash)
-          @dalli_proc.call { |dalli| dalli.get(key_for(hash)) }
+          @dalli_proc.call do |dalli|
+            dalli.get(key_for(hash)).tap do |result|
+              if result
+                trace("fetch_query.cache_hit", adapter: :memcached)
+              else
+                trace("fetch_query.cache_miss", adapter: :memcached)
+              end
+            end
+          end
         end
 
         def save_query(hash, query)
-          @dalli_proc.call { |dalli| dalli.set(key_for(hash), query, @expiration) }
+          @dalli_proc.call do |dalli|
+            trace("save_query", adapter: :memcached) do
+              dalli.set(key_for(hash), query, @expiration)
+            end
+          end
         end
 
         private
