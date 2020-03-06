@@ -49,8 +49,16 @@ module GraphQL
       end
 
       def multiplex(queries, **kwargs)
-        persisted_query_store.tracers = tracers if persisted_queries_tracing_enabled?
         MultiplexResolver.new(self, queries, kwargs).resolve
+      end
+
+      def tracer(name)
+        super.tap do
+          # Since tracers can be set before *and* after our plugin hooks in,
+          # we need to set tracers both when this plugin gets initialized
+          # and any time a tracer is added after initialization
+          persisted_query_store.tracers = tracers if persisted_queries_tracing_enabled?
+        end
       end
     end
   end
