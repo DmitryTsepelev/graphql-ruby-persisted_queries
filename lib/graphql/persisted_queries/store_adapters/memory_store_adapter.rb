@@ -7,22 +7,17 @@ module GraphQL
       class MemoryStoreAdapter < BaseStoreAdapter
         def initialize(_options)
           @storage = {}
+          @name = :memory
         end
 
-        def fetch_query(hash)
-          @storage[hash].tap do |result|
-            if result
-              trace("fetch_query.cache_hit", adapter: :memory)
-            else
-              trace("fetch_query.cache_miss", adapter: :memory)
-            end
-          end
+        protected
+
+        def fetch(hash)
+          @storage[hash]
         end
 
-        def save_query(hash, query)
-          trace("save_query", adapter: :memory) do
-            @storage[hash] = query
-          end
+        def save(hash, query)
+          @storage[hash] = query
         end
       end
     end

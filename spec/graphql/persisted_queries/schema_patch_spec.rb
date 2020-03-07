@@ -14,24 +14,6 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
     end
   end
 
-  Tracer = Class.new do
-    attr_reader :events
-
-    def initialize
-      clear!
-    end
-
-    def trace(key, value)
-      result = yield
-      @events[key] << { metadata: value, result: result }
-      result
-    end
-
-    def clear!
-      @events = Hash.new { |hash, key| hash[key] = [] }
-    end
-  end
-
   let(:query) { "query { someData }" }
 
   let(:sha256) { Digest::SHA256.hexdigest(query) }
@@ -40,7 +22,7 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
     build_test_schema(error_handler: ErrorHandler.new({}))
   end
 
-  let(:tracer) { Tracer.new }
+  let(:tracer) { TestTracer.new }
 
   let(:schema_with_tracer) do
     build_test_schema(error_handler: ErrorHandler.new({}), tracing: true, tracer: tracer)

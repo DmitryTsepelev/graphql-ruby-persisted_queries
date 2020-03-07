@@ -14,26 +14,17 @@ module GraphQL
           @redis_proc = build_redis_proc(redis_client)
           @expiration = expiration || DEFAULT_EXPIRATION
           @namespace = namespace || DEFAULT_NAMESPACE
+          @name = :redis
         end
 
-        def fetch_query(hash)
-          @redis_proc.call do |redis|
-            redis.get(key_for(hash)).tap do |result|
-              if result
-                trace("fetch_query.cache_hit", adapter: :redis)
-              else
-                trace("fetch_query.cache_miss", adapter: :redis)
-              end
-            end
-          end
+        protected
+
+        def fetch(hash)
+          @redis_proc.call { |redis| redis.get(key_for(hash)) }
         end
 
-        def save_query(hash, query)
-          @redis_proc.call do |redis|
-            trace("save_query", adapter: :redis) do
-              redis.set(key_for(hash), query, ex: @expiration)
-            end
-          end
+        def save(hash, query)
+          @redis_proc.call { |redis| redis.set(key_for(hash), query, ex: @expiration) }
         end
 
         private
