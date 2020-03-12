@@ -14,11 +14,8 @@ module GraphQL
 
         def fetch_query(hash)
           fetch(hash).tap do |result|
-            if result
-              trace("fetch_query.cache_hit", adapter: @name)
-            else
-              trace("fetch_query.cache_miss", adapter: @name)
-            end
+            event = result ? "cache_hit" : "cache_miss"
+            trace("fetch_query.#{event}", adapter: @name)
           end
         end
 
