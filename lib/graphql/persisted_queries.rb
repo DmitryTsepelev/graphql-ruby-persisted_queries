@@ -21,6 +21,8 @@ module GraphQL
       error_handler = options.delete(:error_handler) || :default
       schema.configure_persisted_query_error_handler(error_handler)
 
+      schema.persisted_queries_tracing_enabled = options.delete(:tracing)
+
       store = options.delete(:store) || :memory
       schema.configure_persisted_query_store(store, options)
     end

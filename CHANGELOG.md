@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#29](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/29) Instrumentation via graphql-ruby's tracer feature ([@bmorton][])
+
 ## 0.4.0 (2020-02-26)
 
 - [PR#26](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/26) Add Memcached store ([@JanStevens][])

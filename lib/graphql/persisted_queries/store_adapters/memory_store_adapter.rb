@@ -7,13 +7,16 @@ module GraphQL
       class MemoryStoreAdapter < BaseStoreAdapter
         def initialize(_options)
           @storage = {}
+          @name = :memory
         end
 
-        def fetch_query(hash)
+        protected
+
+        def fetch(hash)
           @storage[hash]
         end
 
-        def save_query(hash, query)
+        def save(hash, query)
           @storage[hash] = query
         end
       end

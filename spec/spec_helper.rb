@@ -3,6 +3,7 @@
 require "graphql"
 require "graphql/persisted_queries"
 require "graphql/support/test_schema"
+require "graphql/support/test_tracer"
 
 ENV["RAILS_ENV"] = "test"
 

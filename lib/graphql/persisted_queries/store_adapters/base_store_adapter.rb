@@ -5,14 +5,41 @@ module GraphQL
     module StoreAdapters
       # Base class for all store adapters
       class BaseStoreAdapter
-        def initialize(_options); end
+        include GraphQL::Tracing::Traceable
+        attr_writer :tracers
 
-        def fetch_query(_hash)
+        def initialize(_options)
+          @name = :base
+        end
+
+        def fetch_query(hash)
+          fetch(hash).tap do |result|
+            event = result ? "cache_hit" : "cache_miss"
+            trace("fetch_query.#{event}", adapter: @name)
+          end
+        end
+
+        def save_query(hash, query)
+          trace("save_query", adapter: @name) { save(hash, query) }
+        end
+
+        protected
+
+        def fetch(_hash)
           raise NotImplementedError
         end
 
-        def save_query(_hash, _query)
+        def save(_hash, _query)
           raise NotImplementedError
+        end
+
+        def trace(key, metadata)
+          if @tracers
+            key = "persisted_queries.#{key}"
+            block_given? ? super : super {}
+          elsif block_given?
+            yield
+          end
         end
       end
     end

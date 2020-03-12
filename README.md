@@ -208,6 +208,10 @@ Using `GET` requests for persisted queries allows you to enable HTTP caching (e.
 
 HTTP method verification is important, because when mutations are allowed via `GET` requests, it's easy to perform an attack by sending the link containing mutation to a signed in user.
 
+## Tracing and instrumentation
+
+An experimental tracing feature can be enabled by setting `tracing: true` when configuring the plugin.  Read more about this feature in the [Tracing guide](docs/tracing.md).
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries.

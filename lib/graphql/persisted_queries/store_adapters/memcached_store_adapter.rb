@@ -14,13 +14,16 @@ module GraphQL
           @dalli_proc = build_dalli_proc(dalli_client)
           @expiration = expiration || DEFAULT_EXPIRATION
           @namespace = namespace || DEFAULT_NAMESPACE
+          @name = :memcached
         end
 
-        def fetch_query(hash)
+        protected
+
+        def fetch(hash)
           @dalli_proc.call { |dalli| dalli.get(key_for(hash)) }
         end
 
-        def save_query(hash, query)
+        def save(hash, query)
           @dalli_proc.call { |dalli| dalli.set(key_for(hash), query, @expiration) }
         end
 
