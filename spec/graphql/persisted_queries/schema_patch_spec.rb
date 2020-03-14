@@ -34,8 +34,12 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       selected_query = with_query ? query : nil
       tracer.clear! if with_tracer
 
-      current_schema.execute(selected_query,
-                             extensions: { "persistedQuery" => { "sha256Hash" => sha256 } })
+      current_schema.execute(
+        selected_query,
+        context: {
+          extensions: { "persistedQuery" => { "sha256Hash" => sha256 } }
+        }
+      )
     end
 
     subject(:response) { perform_request }
@@ -107,7 +111,8 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
         # rubocop: disable Lint/HandleExceptions
         begin
           schema.execute(
-            query, extensions: { "persistedQuery" => { "sha256Hash" => sha256 } }
+            query,
+            context: { extensions: { "persistedQuery" => { "sha256Hash" => sha256 } } }
           )
         rescue RuntimeError
           # Ignore the expected error
@@ -126,7 +131,11 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       [
         {
           query: query,
-          extensions: { "persistedQuery" => { "sha256Hash" => Digest::SHA256.hexdigest(query) } }
+          context: {
+            extensions: {
+              "persistedQuery" => { "sha256Hash" => Digest::SHA256.hexdigest(query) }
+            }
+          }
         }
       ]
     end

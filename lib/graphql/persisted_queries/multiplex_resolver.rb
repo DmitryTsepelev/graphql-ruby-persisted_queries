@@ -29,7 +29,7 @@ module GraphQL
       end
 
       def resolve_persisted_query(query_params, pos)
-        extensions = query_params.delete(:extensions)
+        extensions = query_params.dig(:context, :extensions)
         return unless extensions
 
         query_params[:query] = Resolver.new(extensions, @schema).resolve(query_params[:query])
