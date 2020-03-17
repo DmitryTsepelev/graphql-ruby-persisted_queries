@@ -3,6 +3,7 @@
 require "graphql/persisted_queries/hash_generator_builder"
 require "graphql/persisted_queries/resolver"
 require "graphql/persisted_queries/multiplex_resolver"
+require "graphql/persisted_queries/analyzers/http_method_validator"
 
 module GraphQL
   module PersistedQueries
@@ -35,12 +36,10 @@ module GraphQL
       def verify_http_method=(verify)
         return unless verify
 
-        analyzer = HttpMethodAnalyzer.new
-
-        if Gem::Dependency.new("graphql", ">= 1.10.0").match?("graphql", GraphQL::VERSION)
-          query_analyzer(analyzer)
+        if graphql10?
+          query_analyzer(prepare_analyzer)
         else
-          query_analyzers << analyzer
+          query_analyzers << prepare_analyzer
         end
       end
 
@@ -58,6 +57,22 @@ module GraphQL
           # we need to set tracers both when this plugin gets initialized
           # and any time a tracer is added after initialization
           persisted_query_store.tracers = tracers if persisted_queries_tracing_enabled?
+        end
+      end
+
+      private
+
+      def graphql10?
+        Gem::Dependency.new("graphql", ">= 1.10.0").match?("graphql", GraphQL::VERSION)
+      end
+
+      def prepare_analyzer
+        if graphql10? && using_ast_analysis?
+          require "graphql/persisted_queries/analyzers/http_method_ast_analyzer"
+          Analyzers::HttpMethodAstAnalyzer
+        else
+          require "graphql/persisted_queries/analyzers/http_method_analyzer"
+          Analyzers::HttpMethodAnalyzer.new
         end
       end
     end
