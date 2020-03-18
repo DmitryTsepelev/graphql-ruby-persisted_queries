@@ -5,7 +5,6 @@ require "graphql/persisted_queries/schema_patch"
 require "graphql/persisted_queries/store_adapters"
 require "graphql/persisted_queries/version"
 require "graphql/persisted_queries/builder_helpers"
-require "graphql/persisted_queries/http_method_analyzer"
 
 module GraphQL
   # Plugin definition
