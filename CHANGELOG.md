@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.5.1 (2020-03-18)
+
 - [PR#33](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/33) Support AST analyzers ([@DmitryTsepelev][])
 
 ## 0.5.0 (2020-03-12)
