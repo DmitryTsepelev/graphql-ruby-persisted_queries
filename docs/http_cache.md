@@ -28,7 +28,14 @@ get "/graphql", to: "graphql#execute"
 Put the request object to the GraphQL context everywhere you execute GraphQL queries:
 
 ```ruby
-GraphqlSchema.execute(query, variables: variables, context: { request: request })
+GraphqlSchema.execute(
+  query,
+  variables: ensure_hash(params[:variables]),
+  context: {
+    extensions: ensure_hash(params[:extensions])
+    request: request
+  }
+)
 ```
 
 Turn the `verify_http_method` option when configuring the plugin to enforce using `POST` requests for performing mutations (otherwise the error `Mutations cannot be performed via HTTP GET` will be returned):

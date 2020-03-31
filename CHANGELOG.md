@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#30](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/30) **BREAKING CHANGE** Move extenstions to the query context ([@DmitryTsepelev][])
+
 ## 0.5.1 (2020-03-18)
 
 - [PR#33](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/33) Support AST analyzers ([@DmitryTsepelev][])

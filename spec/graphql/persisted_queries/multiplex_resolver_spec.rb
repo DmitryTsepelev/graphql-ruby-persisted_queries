@@ -14,8 +14,14 @@ RSpec.describe GraphQL::PersistedQueries::MultiplexResolver do
 
     let(:queries) do
       [
-        { query: query1, extensions: { "persistedQuery" => { "sha256Hash" => sha256_1 } } },
-        { query: query2, extensions: { "persistedQuery" => { "sha256Hash" => sha256_2 } } }
+        {
+          query: query1,
+          context: { extensions: { "persistedQuery" => { "sha256Hash" => sha256_1 } } }
+        },
+        {
+          query: query2,
+          context: { extensions: { "persistedQuery" => { "sha256Hash" => sha256_2 } } }
+        }
       ]
     end
 

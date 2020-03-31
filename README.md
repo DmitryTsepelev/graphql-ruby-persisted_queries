@@ -51,15 +51,16 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
-Pass `:extensions` argument to all calls of `GraphqlSchema#execute`, usually it happens in `GraphqlController`, `GraphqlChannel` and tests.
+Pass `:extensions` argument as part of a `context` to all calls of `GraphqlSchema#execute`, usually it happens in `GraphqlController`, `GraphqlChannel` and tests:
 
 ```ruby
 GraphqlSchema.execute(
   params[:query],
   variables: ensure_hash(params[:variables]),
-  context: {},
-  operation_name: params[:operationName],
-  extensions: ensure_hash(params[:extensions])
+  context: {
+    extensions: ensure_hash(params[:extensions])
+  },
+  operation_name: params[:operationName]
 )
 ```
 
