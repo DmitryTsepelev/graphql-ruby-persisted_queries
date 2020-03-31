@@ -2,6 +2,8 @@
 
 ## master
 
+## 🥳 1.0.0 (2020-03-31)
+
 - [PR#30](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/30) **BREAKING CHANGE** Move extenstions to the query context ([@DmitryTsepelev][])
 
 ## 0.5.1 (2020-03-18)
