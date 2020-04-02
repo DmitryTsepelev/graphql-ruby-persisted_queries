@@ -32,7 +32,7 @@ GraphqlSchema.execute(
   query,
   variables: ensure_hash(params[:variables]),
   context: {
-    extensions: ensure_hash(params[:extensions])
+    extensions: ensure_hash(params[:extensions]),
     request: request
   }
 )
