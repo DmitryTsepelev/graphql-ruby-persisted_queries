@@ -34,7 +34,8 @@ module GraphQL
 
         query_params[:query] = Resolver.new(extensions, @schema).resolve(query_params[:query])
       rescue Resolver::NotFound, Resolver::WrongHash => e
-        results[pos] = { "errors" => [{ "message" => e.message }] }
+        values = { "errors" => [{ "message" => e.message }] }
+        results[pos] = GraphQL::Query::Result.new(query: query_params[:query], values: values)
       end
 
       def perform_multiplex
