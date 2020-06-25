@@ -2,6 +2,10 @@
 
 ## master
 
+## 🥳 1.0.1 (2020-06-25)
+
+- [PR#34](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/34) Return GraphQL::Query::Result when raise error  ([@ogidow ][])
+
 ## 🥳 1.0.0 (2020-03-31)
 
 - [PR#30](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/30) **BREAKING CHANGE** Move extenstions to the query context ([@DmitryTsepelev][])
@@ -47,3 +51,4 @@
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
 [@bmorton]: https://github.com/bmorton
 [@JanStevens]: https://github.com/JanStevens
+[@ogidow]: https://github.com/ogidow
