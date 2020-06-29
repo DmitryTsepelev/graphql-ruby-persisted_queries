@@ -2,9 +2,13 @@
 
 ## master
 
-## 🥳 1.0.1 (2020-06-25)
+## 1.0.2 (2020-06-29)
 
-- [PR#34](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/34) Return GraphQL::Query::Result when raise error  ([@ogidow ][])
+- [PR#35](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/35) fix args for GraphQL::Query::Result ([@ogidow ][])
+
+## 1.0.1 (2020-06-25)
+
+- [PR#34](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/34) Return GraphQL::Query::Result when raise error ([@ogidow ][])
 
 ## 🥳 1.0.0 (2020-03-31)
 
