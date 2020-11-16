@@ -1,0 +1,52 @@
+name: RSpec
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: "0 10 * * *"
+
+jobs:
+  rspec:
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.3, 2.4, 2.5, 2.6, 2.7]
+        gemfile: [
+          "gemfiles/graphql_1_8.gemfile",
+          "gemfiles/graphql_1_9.gemfile",
+          "gemfiles/graphql_1_10.gemfile",
+          "gemfiles/graphql_master.gemfile"
+        ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: /home/runner/bundle
+        key: bundle-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles(matrix.gemfile) }}-${{ hashFiles('**/*.gemspec') }}
+        restore-keys: |
+          bundle-${{ matrix.ruby }}-${{ matrix.gemfile }}-
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Install system deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install libsqlite3-dev
+    - name: Bundle install
+      run: |
+        bundle config path /home/runner/bundle
+        bundle config --global gemfile ${{ matrix.gemfile }}
+        bundle install
+        bundle update
+    - name: Run RSpec
+      run: |
+        bundle exec rake spec

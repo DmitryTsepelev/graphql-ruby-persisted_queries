@@ -7,7 +7,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedClientBuilder 
   describe "#initialize" do
     let(:options) { {} }
 
-    subject { described_class.new(options).build }
+    subject { described_class.new(**options).build }
 
     context "when memcached_host, memcached_port and memcached_db_name are passed" do
       let(:options) do
@@ -15,7 +15,10 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedClientBuilder 
       end
 
       it "builds memcached URL" do
-        expect(::Dalli::Client).to receive(:new).with("127.0.0.2:11211", {})
+        expect(::Dalli::Client).to receive(:new) do |ip|
+          expect(ip).to eq("127.0.0.2:11211")
+        end
+
         subject
       end
     end
@@ -36,7 +39,10 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedClientBuilder 
       let(:options) { { memcached_url: "127.0.0.4:11211" } }
 
       it "uses passed memcached_url" do
-        expect(::Dalli::Client).to receive(:new).with("127.0.0.4:11211", {})
+        expect(::Dalli::Client).to receive(:new) do |ip|
+          expect(ip).to eq("127.0.0.4:11211")
+        end
+
         subject
       end
 
