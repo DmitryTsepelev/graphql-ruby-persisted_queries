@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.1.0 (2020-11-16)
+
+- [PR#36](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/36) Support Ruby 2.7.0 ([@DmitryTsepelev][])
+
 ## 1.0.2 (2020-06-29)
 
 - [PR#35](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/35) fix args for GraphQL::Query::Result ([@ogidow][])
