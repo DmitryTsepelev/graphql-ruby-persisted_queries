@@ -38,7 +38,7 @@ module GraphQL
         # rubocop: disable Metrics/PerceivedComplexity
         def build_redis_proc(redis_client)
           if redis_client.is_a?(Hash)
-            build_redis_proc(RedisClientBuilder.new(redis_client).build)
+            build_redis_proc(RedisClientBuilder.new(**redis_client).build)
           elsif redis_client.is_a?(Proc)
             redis_client
           elsif defined?(::Redis) && redis_client.is_a?(::Redis)
