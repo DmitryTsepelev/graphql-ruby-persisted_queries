@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/MethodLength
-def build_test_schema(options = {})
+def build_test_schema(**options)
   test_tracer = options.delete(:tracer)
   schema = Class.new(GraphQL::Schema) do
-    use GraphQL::PersistedQueries, options
+    use GraphQL::PersistedQueries, **options
     tracer test_tracer if test_tracer
 
     query(

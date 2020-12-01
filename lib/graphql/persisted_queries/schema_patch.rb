@@ -19,8 +19,8 @@ module GraphQL
       attr_reader :persisted_query_store, :hash_generator_proc, :persisted_query_error_handler
       attr_writer :persisted_queries_tracing_enabled
 
-      def configure_persisted_query_store(store, options)
-        @persisted_query_store = StoreAdapters.build(store, options).tap do |adapter|
+      def configure_persisted_query_store(store, **options)
+        @persisted_query_store = StoreAdapters.build(store, **options).tap do |adapter|
           adapter.tracers = tracers if persisted_queries_tracing_enabled?
         end
       end
@@ -48,7 +48,7 @@ module GraphQL
       end
 
       def multiplex(queries, **kwargs)
-        MultiplexResolver.new(self, queries, kwargs).resolve
+        MultiplexResolver.new(self, queries, **kwargs).resolve
       end
 
       def tracer(name)

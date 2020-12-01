@@ -4,12 +4,12 @@ require "spec_helper"
 
 RSpec.describe GraphQL::PersistedQueries::ErrorHandlers do
   describe ".build" do
-    let(:options) { nil }
-    subject { described_class.build(handler, options) }
+    let(:options) { {} }
+    subject { described_class.build(handler, **options) }
 
     context "when ErrorHandlers::BaseErrorHandler instance is passed" do
       let(:handler) do
-        GraphQL::PersistedQueries::ErrorHandlers::BaseErrorHandler.new(options)
+        GraphQL::PersistedQueries::ErrorHandlers::BaseErrorHandler.new(**options)
       end
 
       it { is_expected.to be(handler) }

@@ -6,7 +6,7 @@ require "redis"
 require "connection_pool"
 
 RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStoreAdapter do
-  subject { described_class.new(options) }
+  subject { described_class.new(**options) }
 
   let(:redis_client) { { redis_url: "redis://127.0.0.3:8791/3" } }
   let(:mock_redis_adapter) { double("RedisStoreAdapterDouble") }

@@ -6,7 +6,7 @@ require "redis"
 require "connection_pool"
 
 RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisStoreAdapter do
-  subject { described_class.new(options) }
+  subject { described_class.new(**options) }
 
   let(:expiration) { nil }
   let(:namespace) { nil }

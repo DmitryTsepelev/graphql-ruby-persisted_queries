@@ -8,7 +8,7 @@ module GraphQL
         include GraphQL::Tracing::Traceable
         attr_writer :tracers
 
-        def initialize(_options)
+        def initialize(**_options)
           @name = :base
         end
 

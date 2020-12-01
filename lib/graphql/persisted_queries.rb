@@ -9,7 +9,7 @@ require "graphql/persisted_queries/builder_helpers"
 module GraphQL
   # Plugin definition
   module PersistedQueries
-    def self.use(schema_defn, options = {})
+    def self.use(schema_defn, **options)
       schema = schema_defn.is_a?(Class) ? schema_defn : schema_defn.target
       SchemaPatch.patch(schema)
 
@@ -23,7 +23,7 @@ module GraphQL
       schema.persisted_queries_tracing_enabled = options.delete(:tracing)
 
       store = options.delete(:store) || :memory
-      schema.configure_persisted_query_store(store, options)
+      schema.configure_persisted_query_store(store, **options)
     end
   end
 end

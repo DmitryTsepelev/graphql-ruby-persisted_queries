@@ -5,7 +5,7 @@ require "spec_helper"
 require "dalli"
 
 RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedStoreAdapter do
-  subject { described_class.new(options) }
+  subject { described_class.new(**options) }
 
   let(:expiration) { nil }
   let(:namespace) { nil }

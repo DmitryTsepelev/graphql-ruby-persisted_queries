@@ -4,7 +4,7 @@ module GraphQL
   module PersistedQueries
     # Resolves multiplex query
     class MultiplexResolver
-      def initialize(schema, queries, kwargs)
+      def initialize(schema, queries, **kwargs)
         @schema = schema
         @queries = queries
         @kwargs = kwargs
@@ -42,7 +42,7 @@ module GraphQL
       def perform_multiplex
         resolve_idx = (0...@queries.count).select { |i| results[i].nil? }
         multiplex_result = @schema.multiplex_original(
-          resolve_idx.map { |i| @queries.at(i) }, @kwargs
+          resolve_idx.map { |i| @queries.at(i) }, **@kwargs
         )
         resolve_idx.each_with_index { |res_i, mult_i| results[res_i] = multiplex_result[mult_i] }
       end

@@ -28,7 +28,7 @@ RSpec.describe GraphQL::PersistedQueries::MultiplexResolver do
     let(:schema) { build_test_schema }
 
     subject do
-      described_class.new(schema, queries, {}).resolve
+      described_class.new(schema, queries).resolve
     end
 
     context "when cache is partially cold" do

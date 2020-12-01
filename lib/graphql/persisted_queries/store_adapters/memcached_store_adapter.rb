@@ -35,7 +35,7 @@ module GraphQL
 
         def build_dalli_proc(dalli_client)
           if dalli_client.is_a?(Hash)
-            build_dalli_proc(MemcachedClientBuilder.new(dalli_client).build)
+            build_dalli_proc(MemcachedClientBuilder.new(**dalli_client).build)
           elsif dalli_client.is_a?(Proc)
             dalli_client
           elsif defined?(::Dalli::Client) && dalli_client.is_a?(::Dalli::Client)
