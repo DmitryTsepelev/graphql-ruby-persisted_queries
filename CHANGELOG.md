@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.1.1 (2020-12-03)
+
+- [PR#37](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/37) Fix deprecation warnings ([@rbviz][])
+
 ## 1.1.0 (2020-11-16)
 
 - [PR#36](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/36) Support Ruby 2.7.0 ([@DmitryTsepelev][])
@@ -60,3 +64,4 @@
 [@bmorton]: https://github.com/bmorton
 [@JanStevens]: https://github.com/JanStevens
 [@ogidow]: https://github.com/ogidow
+[@rbviz]: https://github.com/rbviz
