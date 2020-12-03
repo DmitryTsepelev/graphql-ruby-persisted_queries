@@ -17,7 +17,7 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
     let(:query_str) { query }
     let(:hash_generator_proc) { proc { |value| Digest::SHA256.hexdigest(value) } }
     let(:hash) { hash_generator_proc.call(query) }
-    let(:error_handler) { GraphQL::PersistedQueries::ErrorHandlers::DefaultErrorHandler.new({}) }
+    let(:error_handler) { GraphQL::PersistedQueries::ErrorHandlers::DefaultErrorHandler.new }
 
     let(:schema) do
       double("TestSchema").tap do |schema|

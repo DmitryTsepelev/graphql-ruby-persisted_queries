@@ -4,12 +4,12 @@ require "spec_helper"
 
 RSpec.describe GraphQL::PersistedQueries::StoreAdapters do
   describe ".build" do
-    let(:options) { nil }
-    subject { described_class.build(adapter, options) }
+    let(:options) { {} }
+    subject { described_class.build(adapter, **options) }
 
     context "when StoreAdapters::BaseStoreAdapter instance is passed" do
       let(:adapter) do
-        GraphQL::PersistedQueries::StoreAdapters::MemoryStoreAdapter.new(options)
+        GraphQL::PersistedQueries::StoreAdapters::MemoryStoreAdapter.new(**options)
       end
 
       it { is_expected.to be(adapter) }

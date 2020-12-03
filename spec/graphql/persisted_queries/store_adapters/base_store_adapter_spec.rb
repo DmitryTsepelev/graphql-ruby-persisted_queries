@@ -7,7 +7,7 @@ require "connection_pool"
 
 RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
   TestableStoreAdapter = Class.new(described_class) do
-    def initialize(options)
+    def initialize(**options)
       @name = :testable
       @storage = options[:storage]
     end

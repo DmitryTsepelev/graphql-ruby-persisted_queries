@@ -5,7 +5,7 @@ module GraphQL
     module ErrorHandlers
       # Base class for all error handlers
       class BaseErrorHandler
-        def initialize(_options); end
+        def initialize(**_options); end
 
         def call(_error)
           raise NotImplementedError

@@ -10,16 +10,16 @@ module GraphQL
   module PersistedQueries
     # Contains factory methods for store adapters
     module StoreAdapters
-      def self.build(adapter, options = nil)
+      def self.build(adapter, **options)
         if adapter.is_a?(StoreAdapters::BaseStoreAdapter)
           adapter
         else
-          build_by_name(adapter, options)
+          build_by_name(adapter, **options)
         end
       end
 
-      def self.build_by_name(name, options)
-        const_get("#{BuilderHelpers.camelize(name)}StoreAdapter").new(options || {})
+      def self.build_by_name(name, **options)
+        const_get("#{BuilderHelpers.camelize(name)}StoreAdapter").new(**options)
       rescue NameError => e
         raise e.class, "Persisted query store adapter for :#{name} haven't been found", e.backtrace
       end

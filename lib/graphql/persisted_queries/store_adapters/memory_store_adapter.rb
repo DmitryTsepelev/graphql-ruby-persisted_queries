@@ -5,7 +5,7 @@ module GraphQL
     module StoreAdapters
       # Memory adapter for storing persisted queries
       class MemoryStoreAdapter < BaseStoreAdapter
-        def initialize(_options)
+        def initialize(**_options)
           @storage = {}
           @name = :memory
         end

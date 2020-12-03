@@ -7,13 +7,13 @@ module GraphQL
   module PersistedQueries
     # Contains factory methods for error handlers
     module ErrorHandlers
-      def self.build(handler, options = nil)
+      def self.build(handler, **options)
         if handler.is_a?(ErrorHandlers::BaseErrorHandler)
           handler
         elsif handler.is_a?(Proc)
           build_from_proc(handler)
         else
-          build_by_name(handler, options)
+          build_by_name(handler, **options)
         end
       end
 
@@ -25,8 +25,8 @@ module GraphQL
         proc
       end
 
-      def self.build_by_name(name, options)
-        const_get("#{BuilderHelpers.camelize(name)}ErrorHandler").new(options || {})
+      def self.build_by_name(name, **options)
+        const_get("#{BuilderHelpers.camelize(name)}ErrorHandler").new(**options)
       rescue NameError => e
         raise e.class, "Persisted query error handler for :#{name} haven't been found", e.backtrace
       end

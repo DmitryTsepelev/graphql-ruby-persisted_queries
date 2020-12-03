@@ -19,13 +19,13 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
   let(:sha256) { Digest::SHA256.hexdigest(query) }
 
   let(:schema) do
-    build_test_schema(error_handler: ErrorHandler.new({}))
+    build_test_schema(error_handler: ErrorHandler.new)
   end
 
   let(:tracer) { TestTracer.new }
 
   let(:schema_with_tracer) do
-    build_test_schema(error_handler: ErrorHandler.new({}), tracing: true, tracer: tracer)
+    build_test_schema(error_handler: ErrorHandler.new, tracing: true, tracer: tracer)
   end
 
   describe "#execute" do
@@ -99,11 +99,11 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
 
       around do |test|
         original_store = schema.persisted_query_store
-        schema.configure_persisted_query_store(UnavailableStore.new({}), {})
+        schema.configure_persisted_query_store(UnavailableStore.new)
         begin
           test.run
         ensure
-          schema.configure_persisted_query_store(original_store, {})
+          schema.configure_persisted_query_store(original_store)
         end
       end
 
