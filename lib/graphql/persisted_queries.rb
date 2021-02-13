@@ -9,9 +9,13 @@ require "graphql/persisted_queries/builder_helpers"
 module GraphQL
   # Plugin definition
   module PersistedQueries
+    # rubocop:disable Metrics/MethodLength
     def self.use(schema_defn, **options)
       schema = schema_defn.is_a?(Class) ? schema_defn : schema_defn.target
-      SchemaPatch.patch(schema)
+
+      compiled_queries = options.delete(:compiled_queries)
+      SchemaPatch.patch(schema, compiled_queries)
+      configure_compiled_queries if compiled_queries
 
       schema.hash_generator = options.delete(:hash_generator) || :sha256
 
@@ -24,6 +28,18 @@ module GraphQL
 
       store = options.delete(:store) || :memory
       schema.configure_persisted_query_store(store, **options)
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def self.configure_compiled_queries
+      require "graphql/persisted_queries/compiled_queries/multiplex_patch"
+      require "graphql/persisted_queries/compiled_queries/query_patch"
+
+      GraphQL::Execution::Multiplex.singleton_class.prepend(
+        GraphQL::CompiledQueries::MultiplexPatch
+      )
+
+      GraphQL::Query.prepend(GraphQL::CompiledQueries::QueryPatch)
     end
   end
 end
