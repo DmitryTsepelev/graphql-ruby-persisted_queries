@@ -36,10 +36,10 @@ module GraphQL
       require "graphql/persisted_queries/compiled_queries/query_patch"
 
       GraphQL::Execution::Multiplex.singleton_class.prepend(
-        GraphQL::CompiledQueries::MultiplexPatch
+        GraphQL::PersistedQueries::CompiledQueries::MultiplexPatch
       )
 
-      GraphQL::Query.prepend(GraphQL::CompiledQueries::QueryPatch)
+      GraphQL::Query.prepend(GraphQL::PersistedQueries::CompiledQueries::QueryPatch)
     end
   end
 end

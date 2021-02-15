@@ -11,8 +11,6 @@ require "benchmark"
 require "graphql/persisted_queries"
 require_relative "helpers"
 
-FIELD_COUNTS = [10, 100, 200, 300]
-
 class GraphqlSchema < GraphQL::Schema
   use GraphQL::PersistedQueries, compiled_queries: true
 
