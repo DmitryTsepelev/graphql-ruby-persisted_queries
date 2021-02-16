@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
+require "graphql/persisted_queries/resolver_helpers"
+require "graphql/persisted_queries/errors"
 require "graphql/persisted_queries/error_handlers"
 require "graphql/persisted_queries/schema_patch"
 require "graphql/persisted_queries/store_adapters"
 require "graphql/persisted_queries/version"
 require "graphql/persisted_queries/builder_helpers"
+
+require "graphql/persisted_queries/compiled_queries/resolver"
+require "graphql/persisted_queries/compiled_queries/multiplex_patch"
+require "graphql/persisted_queries/compiled_queries/query_patch"
 
 module GraphQL
   # Plugin definition
@@ -32,8 +38,9 @@ module GraphQL
     # rubocop:enable Metrics/MethodLength
 
     def self.configure_compiled_queries
-      require "graphql/persisted_queries/compiled_queries/multiplex_patch"
-      require "graphql/persisted_queries/compiled_queries/query_patch"
+      if Gem::Dependency.new("graphql", "< 1.12.0").match?("graphql", GraphQL::VERSION)
+        raise ArgumentError, "compiled_queries are not supported for graphql-ruby < 1.12.0"
+      end
 
       GraphQL::Execution::Multiplex.singleton_class.prepend(
         GraphQL::PersistedQueries::CompiledQueries::MultiplexPatch

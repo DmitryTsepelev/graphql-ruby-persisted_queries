@@ -5,7 +5,18 @@ require "rubocop/rake_task"
 RSpec::Core::RakeTask.new(:spec)
 RuboCop::RakeTask.new
 
-task default: [:rubocop, :spec]
+desc "Run specs for compiled queries"
+RSpec::Core::RakeTask.new("spec:compiled_queries") do |task|
+  task.pattern = "**/compiled_queries/**"
+  task.verbose = false
+end
+
+RSpec::Core::RakeTask.new("spec:without_compiled_queries") do |task|
+  task.exclude_pattern = "**/compiled_queries/**"
+  task.verbose = false
+end
+
+task ci_specs: ["spec:without_compiled_queries", "spec:compiled_queries"]
 
 task :bench_gql do
   cmd = %w[bundle exec ruby benchmark/plain_gql.rb]

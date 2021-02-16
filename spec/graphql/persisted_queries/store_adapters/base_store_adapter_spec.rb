@@ -13,7 +13,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
     end
 
     def fetch(hash)
-      @storage[hash]
+      @storage.fetch(hash)
     end
 
     def save(hash, query)
@@ -22,10 +22,30 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
   end
 
   let(:storage) { {} }
+
   subject { TestableStoreAdapter.new(storage: storage) }
+
+  describe "#fetch" do
+    before do
+      allow(storage).to receive(:fetch)
+    end
+
+    it "uses hash as a key" do
+      subject.fetch_query("greenday")
+      expect(storage).to have_received(:fetch).with("greenday")
+    end
+
+    context "when compiled_query = true" do
+      it "adds 'compiled' to key" do
+        subject.fetch_query("greenday", compiled_query: true)
+        expect(storage).to have_received(:fetch).with("compiled:greenday")
+      end
+    end
+  end
 
   describe "tracing events" do
     let(:tracer) { TestTracer.new }
+
     before do
       subject.tracers = [tracer]
     end

@@ -5,25 +5,24 @@ module GraphQL
     module CompiledQueries
       # Patches GraphQL::Execution::Multiplex to support compiled queries
       module MultiplexPatch
-        # 1.12.0-1.12.3
-        # def begin_query(query, multiplex)
-        #   if query.persisted_query_not_found?
-        #     query.context.errors << GraphQL::ExecutionError.new("PersistedQueryNotFound")
-        #     return GraphQL::Execution::Multiplex::NO_OPERATION
-        #   end
-        #
-        #   super
-        # end
+        if Gem::Dependency.new("graphql", ">= 1.12.4").match?("graphql", GraphQL::VERSION)
+          def begin_query(results, idx, query, multiplex)
+            return super unless query.persisted_query_not_found?
 
-        # 1.12.4
-        def begin_query(results, idx, query, multiplex)
-          if query.persisted_query_not_found?
-            query.context.errors << GraphQL::ExecutionError.new("PersistedQueryNotFound")
-            results[idx] = NO_OPERATION
-            return
+            results[idx] = add_not_found_error(query)
           end
+        else
+          def begin_query(query, multiplex)
+            return super unless query.persisted_query_not_found?
 
-          super
+            add_not_found_error(query)
+          end
+        end
+
+        def add_not_found_error(query)
+          query.context.errors.clear
+          query.context.errors << GraphQL::ExecutionError.new("PersistedQueryNotFound")
+          GraphQL::Execution::Multiplex::NO_OPERATION
         end
       end
     end

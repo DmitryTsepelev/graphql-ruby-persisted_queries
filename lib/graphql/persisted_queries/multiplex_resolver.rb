@@ -33,7 +33,7 @@ module GraphQL
         return unless extensions
 
         query_params[:query] = Resolver.new(extensions, @schema).resolve(query_params[:query])
-      rescue Resolver::NotFound, Resolver::WrongHash => e
+      rescue GraphQL::PersistedQueries::NotFound, GraphQL::PersistedQueries::WrongHash => e
         values = { "errors" => [{ "message" => e.message }] }
         query = GraphQL::Query.new(@schema, query_params[:query])
         results[pos] = GraphQL::Query::Result.new(query: query, values: values)

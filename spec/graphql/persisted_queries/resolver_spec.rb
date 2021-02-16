@@ -52,9 +52,7 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
           let(:hash) { "wrong" }
 
           it "raises exception" do
-            expect { subject }.to raise_error(
-              GraphQL::PersistedQueries::Resolver::WrongHash
-            )
+            expect { subject }.to raise_error(GraphQL::PersistedQueries::WrongHash)
           end
         end
       end
@@ -91,7 +89,7 @@ RSpec.describe GraphQL::PersistedQueries::Resolver do
             # rubocop: disable Lint/HandleExceptions
             begin
               subject
-            rescue GraphQL::PersistedQueries::Resolver::NotFound
+            rescue GraphQL::PersistedQueries::NotFound
               # Ignore the expected error
             end
             # rubocop: enable Lint/HandleExceptions

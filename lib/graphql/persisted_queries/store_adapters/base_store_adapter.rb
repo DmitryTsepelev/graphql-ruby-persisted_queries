@@ -14,6 +14,7 @@ module GraphQL
 
         def fetch_query(hash, compiled_query: false)
           key = build_key(hash, compiled_query)
+
           fetch(key).tap do |result|
             event = result ? "cache_hit" : "cache_miss"
             trace("fetch_query.#{event}", adapter: @name)
