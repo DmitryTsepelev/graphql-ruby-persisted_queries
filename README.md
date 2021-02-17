@@ -65,6 +65,20 @@ GraphqlSchema.execute(
 
 You're all set!
 
+## Compiled queries (increases performance up to 2x!)
+
+When query arrives to the backend, GraphQL execution engine needs some time to _parse_ it and build the AST. In case of a huge query it might take [a lot](https://gist.github.com/DmitryTsepelev/36e290cf64b4ec0b18294d0a57fb26ff#file-1_result-md) of time. What if we cache the AST instead of a query text and skip parsing completely? The only thing you need to do is to turn `:compiled_queries` option on:
+
+```ruby
+class GraphqlSchema < GraphQL::Schema
+  use GraphQL::PersistedQueries, compiled_queries: true
+end
+```
+
+Using this option might make your endpoint up to 2x faster according to the [benchmark]().
+
+**Heads up!** This feature only works on `graphql-ruby` 1.12.0 or later, but I guess it might be backported.
+
 ## Advanced usage
 
 All the queries are stored in memory by default, but you can easily switch to another storage (e.g., _redis_:
