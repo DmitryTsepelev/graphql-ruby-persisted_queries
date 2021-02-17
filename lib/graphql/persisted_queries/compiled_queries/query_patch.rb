@@ -11,10 +11,12 @@ module GraphQL
 
         def prepare_ast
           @document = resolver.fetch
-          @persisted_query_not_found = @document.nil? && query_string.nil?
+          not_loaded_document = @document.nil?
+
+          @persisted_query_not_found = not_loaded_document && query_string.nil?
 
           super.tap do
-            resolver.persist(query_string, @document) unless persisted_query_not_found?
+            resolver.persist(query_string, @document) if not_loaded_document && query_string
           end
         end
 
