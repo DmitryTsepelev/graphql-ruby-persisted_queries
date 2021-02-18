@@ -21,11 +21,11 @@ puts "Plain schema:"
 puts
 
 Benchmark.bm(28) do |x|
-  [0, 1].each do |nesting_level|
+  [false, true].each do |with_nested|
     FIELD_COUNTS.each do |field_count|
-      query = generate_query(field_count, nesting_level)
+      query = generate_query(field_count, with_nested)
 
-      x.report("#{field_count} fields, #{nesting_level} nested levels: ") do
+      x.report("#{field_count} fields#{" (nested)" if with_nested}") do
         GraphqlSchema.execute(query)
       end
     end

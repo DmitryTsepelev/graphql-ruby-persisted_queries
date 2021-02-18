@@ -75,7 +75,7 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
-Using this option might make your endpoint up to 2x faster according to the [benchmark]().
+Using this option might make your endpoint up to 2x faster according to the [benchmark](docs/compiled_queries_benchmark.md).
 
 **Heads up!** This feature only works on `graphql-ruby` 1.12.0 or later, but I guess it might be backported.
 
