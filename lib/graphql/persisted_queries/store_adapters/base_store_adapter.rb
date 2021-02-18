@@ -48,7 +48,8 @@ module GraphQL
         private
 
         def build_key(hash, compiled_query)
-          compiled_query ? "compiled:#{hash}" : hash
+          key = "#{RUBY_ENGINE}-#{RUBY_VERSION}:#{GraphQL::VERSION}:#{hash}"
+          compiled_query ? "compiled:#{key}" : key
         end
       end
     end

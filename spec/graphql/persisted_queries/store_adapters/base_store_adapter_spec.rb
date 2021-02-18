@@ -22,6 +22,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
   end
 
   let(:storage) { {} }
+  let(:versioned_key_prefix) { "#{RUBY_ENGINE}-#{RUBY_VERSION}:#{GraphQL::VERSION}" }
 
   subject { TestableStoreAdapter.new(storage: storage) }
 
@@ -32,13 +33,13 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
 
     it "uses hash as a key" do
       subject.fetch_query("greenday")
-      expect(storage).to have_received(:fetch).with("greenday")
+      expect(storage).to have_received(:fetch).with("#{versioned_key_prefix}:greenday")
     end
 
     context "when compiled_query = true" do
       it "adds 'compiled' to key" do
         subject.fetch_query("greenday", compiled_query: true)
-        expect(storage).to have_received(:fetch).with("compiled:greenday")
+        expect(storage).to have_received(:fetch).with("compiled:#{versioned_key_prefix}:greenday")
       end
     end
   end
@@ -51,7 +52,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
     end
 
     it "emits a cache_miss event", focus: true do
-      storage["greenday"] = nil
+      storage["#{versioned_key_prefix}:greenday"] = nil
       subject.fetch_query("greenday")
 
       expect(tracer.events).to eq(
@@ -63,7 +64,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
     end
 
     it "emits a cache_hit event", focus: true do
-      storage["greenday"] = "welcome-to-paradise"
+      storage["#{versioned_key_prefix}:greenday"] = "welcome-to-paradise"
       subject.fetch_query("greenday")
 
       expect(tracer.events).to eq(
