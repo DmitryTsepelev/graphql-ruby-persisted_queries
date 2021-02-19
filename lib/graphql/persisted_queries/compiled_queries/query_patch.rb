@@ -10,6 +10,8 @@ module GraphQL
         end
 
         def prepare_ast
+          return super unless @context[:extensions]
+
           @document = resolver.fetch
           not_loaded_document = @document.nil?
 
