@@ -52,4 +52,4 @@ jobs:
         bundle update
     - name: Run RSpec
       run: |
-        bundle exec rake spec
+        bundle exec rake ci_specs

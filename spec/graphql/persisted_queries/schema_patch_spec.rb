@@ -88,11 +88,11 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       let(:sha256) { 1 }
 
       UnavailableStore = Class.new(GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter) do
-        def fetch_query(_)
+        def fetch_query(_, **_)
           raise "Store unavailable"
         end
 
-        def save_query(_, _)
+        def save_query(_, _, **_)
           raise "Store unavailable"
         end
       end

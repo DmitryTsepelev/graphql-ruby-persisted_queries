@@ -10,9 +10,20 @@ module GraphQL
     # Patches GraphQL::Schema to support persisted queries
     module SchemaPatch
       class << self
-        def patch(schema)
-          schema.singleton_class.class_eval { alias_method :multiplex_original, :multiplex }
+        def patch(schema, compiled_queries)
           schema.singleton_class.prepend(SchemaPatch)
+
+          return if compiled_queries
+
+          schema.singleton_class.class_eval { alias_method :multiplex_original, :multiplex }
+          schema.singleton_class.prepend(MultiplexPatch)
+        end
+      end
+
+      # Patches GraphQL::Schema to override multiplex (not needed for compiled queries)
+      module MultiplexPatch
+        def multiplex(queries, **kwargs)
+          MultiplexResolver.new(self, queries, **kwargs).resolve
         end
       end
 
@@ -45,10 +56,6 @@ module GraphQL
 
       def persisted_queries_tracing_enabled?
         @persisted_queries_tracing_enabled
-      end
-
-      def multiplex(queries, **kwargs)
-        MultiplexResolver.new(self, queries, **kwargs).resolve
       end
 
       def tracer(name)

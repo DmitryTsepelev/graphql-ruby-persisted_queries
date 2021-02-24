@@ -31,6 +31,8 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
     }
   end
 
+  let(:versioned_key_prefix) { "#{RUBY_ENGINE}-#{RUBY_VERSION}:#{GraphQL::VERSION}" }
+
   context "when configuring the redis adapter" do
     it "passes config options to adapter" do
       subject
@@ -42,24 +44,30 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
 
   context "when fetching queries" do
     it "delegates to the memory adapter" do
-      expect(mock_memory_adapter).to receive(:fetch_query).with("abc123").and_return("result!")
+      expect(mock_memory_adapter).to \
+        receive(:fetch_query).with("#{versioned_key_prefix}:abc123").and_return("result!")
+
       subject.fetch_query("abc123")
     end
 
     context "with memory adapter cache miss" do
       before do
-        allow(mock_memory_adapter).to receive(:fetch_query).with("abc123").and_return(nil)
+        allow(mock_memory_adapter).to \
+          receive(:fetch_query).with("#{versioned_key_prefix}:abc123").and_return(nil)
+
         allow(mock_memory_adapter).to receive(:save_query)
       end
 
       it "delegates to the redis adapter" do
-        expect(mock_redis_adapter).to receive(:fetch_query).with("abc123").and_return("result!")
+        expect(mock_redis_adapter).to \
+          receive(:fetch_query).with("#{versioned_key_prefix}:abc123").and_return("result!")
         subject.fetch_query("abc123")
       end
 
       context "with redis adapter cache miss" do
         before do
-          allow(mock_redis_adapter).to receive(:fetch_query).with("abc123").and_return(nil)
+          allow(mock_redis_adapter).to \
+            receive(:fetch_query).with("#{versioned_key_prefix}:abc123").and_return(nil)
         end
 
         it "doesn't persist the result to the memory adapter" do
@@ -70,11 +78,14 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
 
       context "with redis adapter cache hit" do
         before do
-          allow(mock_redis_adapter).to receive(:fetch_query).with("abc123").and_return("result!")
+          allow(mock_redis_adapter).to \
+            receive(:fetch_query).with("#{versioned_key_prefix}:abc123").and_return("result!")
         end
 
         it "persists the result to the memory adapter" do
-          expect(mock_memory_adapter).to receive(:save_query).with("abc123", "result!")
+          expect(mock_memory_adapter).to \
+            receive(:save_query).with("#{versioned_key_prefix}:abc123", "result!")
+
           subject.fetch_query("abc123")
         end
       end
@@ -83,8 +94,12 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
 
   context "when saving queries" do
     it "dispatches to both adapters" do
-      expect(mock_memory_adapter).to receive(:save_query).with("abc123", "result!")
-      expect(mock_redis_adapter).to receive(:save_query).with("abc123", "result!")
+      expect(mock_memory_adapter).to \
+        receive(:save_query).with("#{versioned_key_prefix}:abc123", "result!")
+
+      expect(mock_redis_adapter).to \
+        receive(:save_query).with("#{versioned_key_prefix}:abc123", "result!")
+
       subject.save_query("abc123", "result!")
     end
   end

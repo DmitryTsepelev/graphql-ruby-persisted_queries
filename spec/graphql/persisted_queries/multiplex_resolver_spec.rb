@@ -31,7 +31,7 @@ RSpec.describe GraphQL::PersistedQueries::MultiplexResolver do
       described_class.new(schema, queries).resolve
     end
 
-    context "when cache is partially cold" do
+    context "when one query is not passed" do
       let(:query1) { nil }
       let(:sha256_1) { 1 }
 
@@ -45,7 +45,7 @@ RSpec.describe GraphQL::PersistedQueries::MultiplexResolver do
       end
     end
 
-    context "when cache is cold" do
+    context "when all queries are not passed" do
       let(:query1) { nil }
       let(:query2) { nil }
 
@@ -62,7 +62,7 @@ RSpec.describe GraphQL::PersistedQueries::MultiplexResolver do
       end
     end
 
-    context "when cache is warm" do
+    context "when all queries are passed" do
       it "returns data" do
         expect(subject).to eq(
           [
