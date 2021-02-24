@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.2.0 (2021-02-24)
+
 - [PR#39](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/39) Implement compiled queries  ([@DmitryTsepelev][])
 
 ## 1.1.1 (2020-12-03)
