@@ -24,11 +24,11 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
 
   let(:tracer) { TestTracer.new }
 
-  let(:schema_with_tracer) do
-    build_test_schema(error_handler: ErrorHandler.new, tracing: true, tracer: tracer)
-  end
-
   describe "#execute" do
+    let(:schema_with_tracer) do
+      build_test_schema(error_handler: ErrorHandler.new, tracing: true, tracer: tracer)
+    end
+
     def perform_request(with_tracer: false, with_query: true)
       current_schema = with_tracer ? schema_with_tracer : schema
       selected_query = with_query ? query : nil
@@ -148,6 +148,106 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
 
     it "returns data" do
       expect(subject).to eq([{ "data" => { "someData" => "some value" } }])
+    end
+  end
+
+  describe "inheritance" do
+    let(:schema) { build_test_schema }
+
+    let(:inherited_schema) { Class.new(schema) }
+
+    describe "persisted_query_error_handler" do
+      it "inherits error handler" do
+        expect(schema.persisted_query_error_handler).to \
+          eq(inherited_schema.persisted_query_error_handler)
+      end
+
+      context "when error handler is custom" do
+        let(:schema) do
+          build_test_schema(error_handler: ErrorHandler.new)
+        end
+
+        it "inherits error handler" do
+          expect(schema.persisted_query_error_handler).to \
+            eq(inherited_schema.persisted_query_error_handler)
+        end
+      end
+    end
+
+    describe "persisted_query_store" do
+      it "inherits persisted_query_store handler" do
+        expect(schema.persisted_query_store).to \
+          eq(inherited_schema.persisted_query_store)
+      end
+
+      context "when store is custom" do
+        # rubocop:disable Metrics/LineLength
+        class CustomMemoryStoreAdapter < GraphQL::PersistedQueries::StoreAdapters::MemoryStoreAdapter; end
+        # rubocop:enable Metrics/LineLength
+
+        let(:schema) do
+          build_test_schema(store: CustomMemoryStoreAdapter.new)
+        end
+
+        it "inherits persisted_query_store" do
+          expect(schema.persisted_query_store).to \
+            eq(inherited_schema.persisted_query_store)
+
+          expect(inherited_schema.persisted_query_store).to be_a(CustomMemoryStoreAdapter)
+        end
+      end
+    end
+
+    describe "hash_generator" do
+      it "inherits hash_generator_proc handler" do
+        expect(schema.hash_generator_proc).to \
+          eq(inherited_schema.hash_generator_proc)
+      end
+
+      context "when hash_generator is custom" do
+        let(:custom_hash_generator) { proc { |_| "42" } }
+
+        let(:schema) do
+          build_test_schema(hash_generator: custom_hash_generator)
+        end
+
+        it "inherits hash_generator_proc handler" do
+          expect(schema.hash_generator_proc).to \
+            eq(inherited_schema.hash_generator_proc)
+        end
+      end
+    end
+
+    describe "verify_http_method" do
+      it "not sets up analyzer" do
+        expect(inherited_schema.query_analyzers).to be_empty
+      end
+
+      context "when verify_http_method is set to true in parent schema" do
+        let(:schema) do
+          build_test_schema(verify_http_method: true)
+        end
+
+        it "sets up analyzer" do
+          expect(inherited_schema.query_analyzers).not_to be_empty
+        end
+      end
+    end
+
+    describe "persisted_queries_tracing_enabled" do
+      it "sets persisted_queries_tracing_enabled to false" do
+        expect(inherited_schema.persisted_queries_tracing_enabled?).to be_falsey
+      end
+
+      context "when persisted_queries_tracing_enabled is set to true in parent schema" do
+        let(:schema) do
+          build_test_schema(tracing: true)
+        end
+
+        it "sets persisted_queries_tracing_enabled to true" do
+          expect(inherited_schema.persisted_queries_tracing_enabled?).to eq(true)
+        end
+      end
     end
   end
 end

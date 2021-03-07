@@ -16,4 +16,10 @@ RSpec.configure do |config|
 
   config.formatter = :documentation
   config.color = true
+
+  config.around(:each, compiled_queries_support: true) do |example|
+    next if Gem::Dependency.new("graphql", "< 1.12.0").match?("graphql", GraphQL::VERSION)
+
+    example.run
+  end
 end

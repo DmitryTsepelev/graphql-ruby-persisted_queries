@@ -27,13 +27,20 @@ module GraphQL
         end
       end
 
-      attr_reader :persisted_query_store, :hash_generator_proc, :persisted_query_error_handler
       attr_writer :persisted_queries_tracing_enabled
 
       def configure_persisted_query_store(store, **options)
         @persisted_query_store = StoreAdapters.build(store, **options).tap do |adapter|
           adapter.tracers = tracers if persisted_queries_tracing_enabled?
         end
+      end
+
+      def persisted_query_store
+        @persisted_query_store ||= find_inherited_value(:persisted_query_store)
+      end
+
+      def persisted_query_error_handler
+        @persisted_query_error_handler ||= find_inherited_value(:persisted_query_error_handler)
       end
 
       def configure_persisted_query_error_handler(handler)
@@ -44,12 +51,17 @@ module GraphQL
         @hash_generator_proc = HashGeneratorBuilder.new(hash_generator).build
       end
 
+      def hash_generator_proc
+        @hash_generator_proc ||= find_inherited_value(:hash_generator_proc)
+      end
+
       def verify_http_method=(verify)
         query_analyzer(prepare_analyzer) if verify
       end
 
       def persisted_queries_tracing_enabled?
-        @persisted_queries_tracing_enabled
+        @persisted_queries_tracing_enabled ||=
+          find_inherited_value(:persisted_queries_tracing_enabled?)
       end
 
       def tracer(name)
