@@ -2,9 +2,8 @@
 
 require "spec_helper"
 
-RSpec.describe GraphQL::PersistedQueries::CompiledQueries::Resolver do
-  next if Gem::Dependency.new("graphql", "< 1.12.0").match?("graphql", GraphQL::VERSION)
-
+RSpec.describe GraphQL::PersistedQueries::CompiledQueries::Resolver,
+               compiled_queries_support: true do
   let(:query) { "query { user }" }
   let(:query_str) { query }
   let(:extensions) { {} }
