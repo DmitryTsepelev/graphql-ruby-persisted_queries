@@ -45,13 +45,7 @@ module GraphQL
       end
 
       def verify_http_method=(verify)
-        return unless verify
-
-        if graphql10?
-          query_analyzer(prepare_analyzer)
-        else
-          query_analyzers << prepare_analyzer
-        end
+        query_analyzer(prepare_analyzer) if verify
       end
 
       def persisted_queries_tracing_enabled?
@@ -69,12 +63,8 @@ module GraphQL
 
       private
 
-      def graphql10?
-        Gem::Dependency.new("graphql", ">= 1.10.0").match?("graphql", GraphQL::VERSION)
-      end
-
       def prepare_analyzer
-        if graphql10? && using_ast_analysis?
+        if using_ast_analysis?
           require "graphql/persisted_queries/analyzers/http_method_ast_analyzer"
           Analyzers::HttpMethodAstAnalyzer
         else

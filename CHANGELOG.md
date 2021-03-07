@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#44](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/44) Deprecate graphql-ruby 1.8 and 1.9  ([@DmitryTsepelev][])
+
 ## 1.2.0 (2021-02-24)
 
 - [PR#39](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/39) Implement compiled queries  ([@DmitryTsepelev][])
