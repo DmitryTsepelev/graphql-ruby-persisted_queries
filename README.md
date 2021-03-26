@@ -1,6 +1,6 @@
 # GraphQL::PersistedQueries
 
-`GraphQL::PersistedQueries` is the implementation of [persisted queries](https://github.com/apollographql/apollo-link-persisted-queries) for [graphql-ruby](https://github.com/rmosolgo/graphql-ruby). With this plugin your backend will cache all the queries, while frontend will send the full query only when it's not found at the backend storage.
+`GraphQL::PersistedQueries` is the implementation of [persisted queries](https://www.apollographql.com/docs/react/api/link/persisted-queries/) for [graphql-ruby](https://github.com/rmosolgo/graphql-ruby). With this plugin your backend will cache all the queries, while frontend will send the full query only when it's not found at the backend storage.
 
 - 🗑**Heavy query parameter will be omitted in most of cases** – network requests will become less heavy
 - 🤝**Clients share cached queries** – it's enough to miss cache only once for each unique query
@@ -15,20 +15,18 @@
 
 ## Getting started
 
-First of all, install and configure [apollo-link-persisted-queries](https://github.com/apollographql/apollo-link-persisted-queries) on the front–end side:
+First of all, install and configure [apollo's persisted queries](https://www.apollographql.com/docs/react/api/link/persisted-queries/) on the front–end side:
 
 ```js
-import { createPersistedQueryLink } from "apollo-link-persisted-queries";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import ApolloClient from "apollo-client";
+import { HttpLink, InMemoryCache, ApolloClient } from "@apollo/client";
+import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries";
+import { sha256 } from 'crypto-hash';
 
-
-// use this with Apollo Client
-const link = createPersistedQueryLink().concat(createHttpLink({ uri: "/graphql" }));
+const httpLink = new HttpLink({ uri: "/graphql" });
+const persistedQueriesLink = createPersistedQueryLink({ sha256 });
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: link,
+  link: persistedQueriesLink.concat(httpLink);
 });
 ```
 
@@ -95,9 +93,9 @@ When the error occurs, the gem tries to not interrupt the regular flow of the ap
 
 Since our queries are slim now, we can switch back to HTTP GET, you can find a [guide](docs/http_cache.md) here.
 
-[batch-link](https://www.apollographql.com/docs/link/links/batch-http/) allows to group queries on the client side into a single HTTP request before sending to the server. In this case you need to use `GraphqlSchema.multiplex(queries)` instead of `#execute`. The gem supports it too, no action required!
+[batch-link](https://www.apollographql.com/docs/react/api/link/apollo-link-batch-http/) allows to group queries on the client side into a single HTTP request before sending to the server. In this case you need to use `GraphqlSchema.multiplex(queries)` instead of `#execute`. The gem supports it too, no action required!
 
-[apollo-link-persisted-queries](https://github.com/apollographql/apollo-link-persisted-queries) uses _SHA256_ for building hashes by default. Check out this [guide](docs/hash.md) if you want to override this behavior.
+[persisted-queries-link](https://www.apollographql.com/docs/react/api/link/persisted-queries/) uses _SHA256_ for building hashes by default. Check out this [guide](docs/hash.md) if you want to override this behavior.
 
 An experimental tracing feature can be enabled by setting `tracing: true` when configuring the plugin. Read more about this feature in the [Tracing guide](docs/tracing.md).
 
