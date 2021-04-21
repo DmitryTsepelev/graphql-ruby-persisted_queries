@@ -18,7 +18,7 @@ module GraphQL
             expiration: expiration,
             namespace: namespace
           )
-          @memory_adapter = memory_adapter_class.new(nil)
+          @memory_adapter = memory_adapter_class.new
           @name = :redis_with_local_cache
         end
 
