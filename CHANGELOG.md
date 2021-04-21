@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#47](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/47) Properly initialize memory adapter inside RedisWithLocalCacheStoreAdapter ([@DmitryTsepelev][])
+
 ## 1.2.1 (2021-03-07)
 
 - [PR#43](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/43) Properly handle configuration when schema is inherited ([@DmitryTsepelev][])
