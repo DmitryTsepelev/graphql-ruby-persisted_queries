@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.2.2 (2021-04-21)
+
 - [PR#47](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/47) Properly initialize memory adapter inside RedisWithLocalCacheStoreAdapter ([@DmitryTsepelev][])
 
 ## 1.2.1 (2021-03-07)
