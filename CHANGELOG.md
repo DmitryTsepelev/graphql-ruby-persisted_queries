@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.2.3 (2021-05-14)
+
+- [PR#49](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/49) Allow nil redis_client with ENV["REDIS_URL"] ([@louim][])
+
 ## 1.2.2 (2021-04-21)
 
 - [PR#47](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/47) Properly initialize memory adapter inside RedisWithLocalCacheStoreAdapter ([@DmitryTsepelev][])
@@ -78,3 +82,4 @@
 [@JanStevens]: https://github.com/JanStevens
 [@ogidow]: https://github.com/ogidow
 [@rbviz]: https://github.com/rbviz
+[@louim]: https://github.com/louim
