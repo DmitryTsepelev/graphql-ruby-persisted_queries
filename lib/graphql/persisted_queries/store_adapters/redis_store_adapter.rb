@@ -10,7 +10,7 @@ module GraphQL
         DEFAULT_EXPIRATION = 24 * 60 * 60
         DEFAULT_NAMESPACE = "graphql-persisted-query"
 
-        def initialize(redis_client:, expiration: nil, namespace: nil)
+        def initialize(redis_client: {}, expiration: nil, namespace: nil)
           @redis_proc = build_redis_proc(redis_client)
           @expiration = expiration || DEFAULT_EXPIRATION
           @namespace = namespace || DEFAULT_NAMESPACE

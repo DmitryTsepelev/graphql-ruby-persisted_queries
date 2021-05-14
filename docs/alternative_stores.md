@@ -25,6 +25,9 @@ class GraphqlSchema < GraphQL::Schema
   use GraphQL::PersistedQueries,
       store: :redis,
       redis_client: ConnectionPool.new { Redis.new(url: "redis://127.0.0.2:2214/7") }
+  # or with ENV["REDIS_URL"]
+  use GraphQL::PersistedQueries,
+      store: :redis
 end
 ```
 
