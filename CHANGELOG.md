@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.2.4 (2021-06-07)
+
+- [PR#50](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/50) Support empty redis_client arg on redis with locale cache ([@louim][])
+
 ## 1.2.3 (2021-05-14)
 
 - [PR#49](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/49) Allow nil redis_client with ENV["REDIS_URL"] ([@louim][])
