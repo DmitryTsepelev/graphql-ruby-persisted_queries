@@ -8,7 +8,7 @@ module GraphQL
         DEFAULT_REDIS_ADAPTER_CLASS = RedisStoreAdapter
         DEFAULT_MEMORY_ADAPTER_CLASS = MemoryStoreAdapter
 
-        def initialize(redis_client:, expiration: nil, namespace: nil, redis_adapter_class: nil,
+        def initialize(redis_client: {}, expiration: nil, namespace: nil, redis_adapter_class: nil,
                        memory_adapter_class: nil)
           redis_adapter_class ||= DEFAULT_REDIS_ADAPTER_CLASS
           memory_adapter_class ||= DEFAULT_MEMORY_ADAPTER_CLASS
