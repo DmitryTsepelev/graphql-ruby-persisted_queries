@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#51](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/51) Drop Ruby 2.3 and 2.4 support ([@DmitryTsepelev][])
+
 ## 1.2.4 (2021-06-07)
 
 - [PR#50](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/50) Support empty redis_client arg on redis with locale cache ([@louim][])
