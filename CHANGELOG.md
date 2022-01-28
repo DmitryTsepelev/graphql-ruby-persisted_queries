@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.4.0 (2022-01-28)
+
 - [PR#52](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/52) Drop Ruby 2.5 support, add Ruby 3.0 ([@DmitryTsepelev][])
 
 ## 1.3.0 (2021-10-19)
