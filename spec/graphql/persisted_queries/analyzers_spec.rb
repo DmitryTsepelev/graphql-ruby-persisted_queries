@@ -127,8 +127,10 @@ RSpec.describe GraphQL::PersistedQueries::Analyzers do
         mutation_klass = mutation_class
 
         Class.new(GraphQL::Schema) do
-          use GraphQL::Execution::Interpreter
-          use GraphQL::Analysis::AST
+          if Gem::Dependency.new("graphql", "< 2").match?("graphql", GraphQL::VERSION)
+            use GraphQL::Execution::Interpreter
+            use GraphQL::Analysis::AST
+          end
           use GraphQL::PersistedQueries, verify_http_method: true
           query(query_klass)
           mutation(mutation_klass)
