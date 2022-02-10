@@ -38,16 +38,6 @@ class GraphqlSchema < GraphQL::Schema
 end
 ```
 
-**Heads up!** If you've already switched to interpreter mode and and AST analyzers—make sure AST plugin is added _before_ `GraphQL::PersistedQueries`:
-
-```ruby
-class GraphqlSchema < GraphQL::Schema
-  use GraphQL::Execution::Interpreter
-  use GraphQL::Analysis::AST
-  use GraphQL::PersistedQueries
-end
-```
-
 Pass `:extensions` argument as part of a `context` to all calls of `GraphqlSchema#execute`, usually it happens in `GraphqlController`, `GraphqlChannel` and tests:
 
 ```ruby
