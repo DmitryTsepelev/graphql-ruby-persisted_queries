@@ -25,6 +25,7 @@ jobs:
           "gemfiles/graphql_1_12_0.gemfile",
           "gemfiles/graphql_1_12_4.gemfile",
           "gemfiles/graphql_1_13_7.gemfile",
+          "gemfiles/graphql_2_0_0.gemfile",
           "gemfiles/graphql_master.gemfile"
         ]
 
