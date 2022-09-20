@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#56](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/56) Support graphql-ruby 2.0.14 ([@DmitryTsepelev][])
+
 ## 1.5.0 (2022-02-10)
 
 - [PR#53](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/53) Support graphql-ruby 2.0.0 ([@DmitryTsepelev][])
