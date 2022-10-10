@@ -4,8 +4,10 @@ module GraphQL
   module PersistedQueries
     # Raised when persisted query is not found in the storage
     class NotFound < StandardError
+      MESSAGE = "PersistedQueryNotFound"
+
       def message
-        "PersistedQueryNotFound"
+        MESSAGE
       end
     end
 

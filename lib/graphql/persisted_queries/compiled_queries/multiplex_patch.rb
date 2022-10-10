@@ -21,7 +21,7 @@ module GraphQL
 
         def add_not_found_error(query)
           query.context.errors.clear
-          query.context.errors << GraphQL::ExecutionError.new("PersistedQueryNotFound")
+          query.context.errors << GraphQL::ExecutionError.new(NotFound::MESSAGE)
           GraphQL::Execution::Multiplex::NO_OPERATION
         end
       end

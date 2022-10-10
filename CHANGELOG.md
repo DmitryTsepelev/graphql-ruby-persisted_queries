@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#57](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/57) Refactor code to use instrumentation instead of a monkey patch, deprecate graphql-ruby 1.10 and 1.11 ([@DmitryTsepelev][])
+
 ## 1.5.1 (2022-09-28)
 
 - [PR#56](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/56) Support graphql-ruby 2.0.14 ([@DmitryTsepelev][])
