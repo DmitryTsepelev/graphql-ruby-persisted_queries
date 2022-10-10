@@ -3,6 +3,7 @@
 require "graphql/persisted_queries/hash_generator_builder"
 require "graphql/persisted_queries/resolver"
 require "graphql/persisted_queries/multiplex_resolver"
+require "graphql/persisted_queries/compiled_queries/instrumentation"
 require "graphql/persisted_queries/analyzers/http_method_validator"
 
 module GraphQL
@@ -13,10 +14,12 @@ module GraphQL
         def patch(schema, compiled_queries)
           schema.singleton_class.prepend(SchemaPatch)
 
-          return if compiled_queries
-
-          schema.singleton_class.class_eval { alias_method :multiplex_original, :multiplex }
-          schema.singleton_class.prepend(MultiplexPatch)
+          if compiled_queries
+            schema.instrument :query, CompiledQueries::Instrumentation
+          else
+            schema.singleton_class.class_eval { alias_method :multiplex_original, :multiplex }
+            schema.singleton_class.prepend(MultiplexPatch)
+          end
         end
       end
 
