@@ -1,17 +1,10 @@
-# GraphQL::PersistedQueries
+# GraphQL::PersistedQueries ![](https://ruby-gem-downloads-badge.herokuapp.com/graphql-persisted_queries?type=total)
 
 `GraphQL::PersistedQueries` is the implementation of [persisted queries](https://www.apollographql.com/docs/react/api/link/persisted-queries/) for [graphql-ruby](https://github.com/rmosolgo/graphql-ruby). With this plugin your backend will cache all the queries, while frontend will send the full query only when it's not found at the backend storage.
 
 - 🗑**Heavy query parameter will be omitted in most of cases** – network requests will become less heavy
 - 🤝**Clients share cached queries** – it's enough to miss cache only once for each unique query
 - 🎅**Works for clients without persisted query support**
-
-
-<p align="center">
-  <a href="https://evilmartians.com/?utm_source=graphql-ruby-persisted_queries">
-    <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54">
-  </a>
-</p>
 
 ## Getting started
 
@@ -91,6 +84,10 @@ An experimental tracing feature can be enabled by setting `tracing: true` when c
 
 > 📖 Read more about the gem internals: [Persisted queries in GraphQL:
 Slim down Apollo requests to your Ruby application](https://evilmartians.com/chronicles/persisted-queries-in-graphql-slim-down-apollo-requests-to-your-ruby-application)
+
+## Credits
+
+Initially sponsored by [Evil Martians](http://evilmartians.com).
 
 ## Contributing
 
