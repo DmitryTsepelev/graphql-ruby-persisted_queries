@@ -10,26 +10,14 @@ module GraphQL
           def before_query(query)
             return unless query.context[:extensions]
 
-            resolver = resolver_for(query)
-            if (document = resolver.fetch)
-              query.fulfill_document(document)
-            else
-              query.not_loaded_document!
-            end
-
-            return if document || query.query_string
+            query.try_load_document!
+            return if query.document || query.query_string
 
             query.persisted_query_not_found!
             query.context.errors << GraphQL::ExecutionError.new(NotFound::MESSAGE)
           end
 
           def after_query(*); end
-
-          private
-
-          def resolver_for(query)
-            CompiledQueries::Resolver.new(query.schema, query.context[:extensions])
-          end
         end
       end
     end
