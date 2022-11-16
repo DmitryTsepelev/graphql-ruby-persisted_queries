@@ -5,14 +5,6 @@ module GraphQL
     module CompiledQueries
       # Patches GraphQL::Query to support compiled queries
       module QueryPatch
-        def fulfill_document(document)
-          @document = document
-        end
-
-        def not_loaded_document!
-          @not_loaded_document = true
-        end
-
         def persisted_query_not_found!
           @persisted_query_not_found = true
         end
@@ -22,15 +14,27 @@ module GraphQL
         end
 
         def prepare_ast
-          return super unless @context[:extensions]
+          return super if @context[:extensions].nil? || @document
+
+          try_load_document!
 
           super.tap do
             if @context.errors.any?(&method(:not_found_error?))
               @context.errors.select!(&method(:not_found_error?))
             end
 
-            resolver.persist(query_string, @document) if @not_loaded_document && query_string
+            if @persisted_document_not_found && query_string
+              resolver.persist(query_string, @document)
+            end
           end
+        end
+
+        def try_load_document!
+          return if @document || @persisted_document_not_found
+
+          compiled_query_resolver = CompiledQueries::Resolver.new(schema, context[:extensions])
+          @document = compiled_query_resolver.fetch
+          @persisted_document_not_found = @document.nil?
         end
 
         private

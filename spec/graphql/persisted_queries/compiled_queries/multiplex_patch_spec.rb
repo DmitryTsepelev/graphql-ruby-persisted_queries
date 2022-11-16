@@ -27,6 +27,7 @@ RSpec.describe GraphQL::PersistedQueries::CompiledQueries::MultiplexPatch do
       before do
         allow(GraphQL).to receive(:parse).and_call_original
         allow(schema.persisted_query_store).to receive(:save_query).and_call_original
+        allow(schema.persisted_query_store).to receive(:fetch_query).and_call_original
       end
 
       context "when query is not passed" do
@@ -75,7 +76,30 @@ RSpec.describe GraphQL::PersistedQueries::CompiledQueries::MultiplexPatch do
 
         it "persists query" do
           subject
-          expect(schema.persisted_query_store).to have_received(:save_query)
+          expect(schema.persisted_query_store).to have_received(:fetch_query).once
+          expect(schema.persisted_query_store).to have_received(:save_query).once
+        end
+
+        context "when schema has tracer that calls prepare_ast" do
+          let(:tracer_calling_prepare_ast) do
+            Class.new do
+              def trace(key, data)
+                data[:multiplex].queries.map(&:query?) if key == "execute_multiplex"
+
+                yield
+              end
+            end
+          end
+
+          let(:schema) do
+            build_test_schema(compiled_queries: true, tracer: tracer_calling_prepare_ast.new)
+          end
+
+          it "persists query" do
+            subject
+            expect(schema.persisted_query_store).to have_received(:fetch_query).once
+            expect(schema.persisted_query_store).to have_received(:save_query).once
+          end
         end
 
         context "when cache is warm" do
@@ -88,8 +112,10 @@ RSpec.describe GraphQL::PersistedQueries::CompiledQueries::MultiplexPatch do
           end
 
           it "not persists query" do
+            expect(schema.persisted_query_store).to have_received(:fetch_query).once
             expect(schema.persisted_query_store).to have_received(:save_query).once
             subject
+            expect(schema.persisted_query_store).to have_received(:fetch_query).twice
             expect(schema.persisted_query_store).to have_received(:save_query).once
           end
 
