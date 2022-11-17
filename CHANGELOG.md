@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.6.1 (2022-11-17)
+
 - [PR#60](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/60)
 Handle situations when prepare_ast happens before instrumentation ([@DmitryTsepelev][])
 
