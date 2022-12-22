@@ -6,6 +6,12 @@
 - 🤝**Clients share cached queries** – it's enough to miss cache only once for each unique query
 - 🎅**Works for clients without persisted query support**
 
+Used in production by:
+
+- [Yammer by Microsoft](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/issues/20#issuecomment-587945989)
+- Toptal
+- _Want to be here? Let me know_ 🙂
+
 ## Getting started
 
 First of all, install and configure [apollo's persisted queries](https://www.apollographql.com/docs/react/api/link/persisted-queries/) on the front–end side:
