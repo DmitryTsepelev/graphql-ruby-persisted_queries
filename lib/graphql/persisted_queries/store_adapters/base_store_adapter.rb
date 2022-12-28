@@ -12,7 +12,8 @@ module GraphQL
           @name = :base
         end
 
-        def fetch_query(hash, compiled_query: false)
+        def fetch_query(hash, options = {})
+          compiled_query = options[:compiled_query] || false
           key = build_key(hash, compiled_query)
 
           fetch(key).tap do |result|
