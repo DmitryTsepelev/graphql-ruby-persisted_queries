@@ -30,21 +30,19 @@ module GraphQL
           @redis_adapter.tracers = tracers
         end
 
-        protected
-
         def fetch(hash)
-          result = @memory_adapter.fetch_query(hash)
+          result = @memory_adapter.fetch(hash)
           result ||= begin
-            inner_result = @redis_adapter.fetch_query(hash)
-            @memory_adapter.save_query(hash, inner_result) if inner_result
+            inner_result = @redis_adapter.fetch(hash)
+            @memory_adapter.save(hash, inner_result) if inner_result
             inner_result
           end
           result
         end
 
         def save(hash, query)
-          @redis_adapter.save_query(hash, query)
-          @memory_adapter.save_query(hash, query)
+          @redis_adapter.save(hash, query)
+          @memory_adapter.save(hash, query)
         end
 
         private

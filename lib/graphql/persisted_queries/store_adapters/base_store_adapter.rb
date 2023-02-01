@@ -27,8 +27,6 @@ module GraphQL
           trace("save_query", adapter: @name) { save(key, query) }
         end
 
-        protected
-
         def fetch(_hash)
           raise NotImplementedError
         end

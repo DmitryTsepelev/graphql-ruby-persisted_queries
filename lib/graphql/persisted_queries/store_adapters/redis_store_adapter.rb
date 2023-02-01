@@ -17,8 +17,6 @@ module GraphQL
           @name = :redis
         end
 
-        protected
-
         def fetch(hash)
           @redis_proc.call { |redis| redis.get(key_for(hash)) }
         end
