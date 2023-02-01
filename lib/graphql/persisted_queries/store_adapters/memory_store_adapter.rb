@@ -10,8 +10,6 @@ module GraphQL
           @name = :memory
         end
 
-        protected
-
         def fetch(hash)
           @storage[hash]
         end

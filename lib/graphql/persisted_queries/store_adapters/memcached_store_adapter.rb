@@ -17,8 +17,6 @@ module GraphQL
           @name = :memcached
         end
 
-        protected
-
         def fetch(hash)
           @dalli_proc.call { |dalli| dalli.get(key_for(hash)) }
         end
