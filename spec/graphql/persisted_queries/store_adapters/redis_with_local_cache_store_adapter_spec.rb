@@ -136,10 +136,10 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
   context "when saving queries" do
     it "dispatches to both adapters" do
       expect(mock_memory_adapter).to \
-        receive(:save_query).with("#{versioned_key_prefix}:abc123", "result!")
+        receive(:save).with("#{versioned_key_prefix}:abc123", "result!")
 
       expect(mock_redis_adapter).to \
-        receive(:save_query).with("#{versioned_key_prefix}:abc123", "result!")
+        receive(:save).with("#{versioned_key_prefix}:abc123", "result!")
 
       subject.save_query("abc123", "result!")
     end
