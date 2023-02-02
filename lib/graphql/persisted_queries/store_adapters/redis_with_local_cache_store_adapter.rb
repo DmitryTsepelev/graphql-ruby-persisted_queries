@@ -22,14 +22,6 @@ module GraphQL
           @name = :redis_with_local_cache
         end
 
-        # We don't need to implement our own traces for this adapter since the
-        # underlying adapters will emit the proper events for us.  However,
-        # since tracers can be defined at any time, we need to pass them through.
-        def tracers=(tracers)
-          @memory_adapter.tracers = tracers
-          @redis_adapter.tracers = tracers
-        end
-
         def fetch(hash)
           result = @memory_adapter.fetch(hash)
           result ||= begin
