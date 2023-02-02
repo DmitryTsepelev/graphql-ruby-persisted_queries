@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.7.0 (2023-02-02)
+
+- [PR#62](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/62)
+Fix double hashing of keys in case of redis_with_local_cache_store adapter ([@mpospelov][])
+- [PR#62](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/62) Drop tracers= implementation as it's no longer valid ([@mpospelov][])
+
 ## 1.6.1 (2022-11-17)
 
 - [PR#60](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/60)
@@ -112,3 +118,4 @@ Handle situations when prepare_ast happens before instrumentation ([@DmitryTsepe
 [@ogidow]: https://github.com/ogidow
 [@rbviz]: https://github.com/rbviz
 [@louim]: https://github.com/louim
+[@mpospelov]: https://github.com/mpospelov
