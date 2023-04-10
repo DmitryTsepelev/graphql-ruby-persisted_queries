@@ -70,7 +70,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
       expect(tracer.events).to eq(
         "persisted_queries.fetch_query.cache_hit" => [{
           metadata: { adapter: :testable },
-          result: nil
+          result: "welcome-to-paradise"
         }]
       )
     end
