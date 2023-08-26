@@ -86,7 +86,7 @@ Since our queries are slim now, we can switch back to HTTP GET, you can find a [
 
 [persisted-queries-link](https://www.apollographql.com/docs/react/api/link/persisted-queries/) uses _SHA256_ for building hashes by default. Check out this [guide](docs/hash.md) if you want to override this behavior.
 
-It is possible to skip some parts of the query lifecycle for cases when query is persisted—read more [here](docs/skip_query_preprocessing).
+It is possible to skip some parts of the query lifecycle for cases when query is persisted - read more [here](docs/skip_query_preprocessing.md).
 
 An experimental tracing feature can be enabled by setting `tracing: true` when configuring the plugin. Read more about this feature in the [Tracing guide](docs/tracing.md).
 
