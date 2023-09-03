@@ -2,6 +2,9 @@
 
 ## master
 
+- [PR#64](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/64)
+Add query to cache_hit trace event ([@DmitryTsepelev][])
+
 ## 1.7.0 (2023-02-02)
 
 - [PR#62](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/62)
