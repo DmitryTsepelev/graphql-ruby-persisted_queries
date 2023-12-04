@@ -65,6 +65,11 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
         events = tracer.events["persisted_queries.save_query"]
         expect(events).to eq([{ metadata: { adapter: :memory }, result: query }])
       end
+
+      it "context.query.lookahead is working" do
+        request = perform_request(with_tracer: true, with_query: true)
+        expect(request.context.query.lookahead.selections.map(&:name)).to eql([:some_data])
+      end
     end
 
     context "when cache is warm" do
@@ -80,6 +85,14 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
         perform_request(with_tracer: true, with_query: false)
         events = tracer.events["persisted_queries.fetch_query.cache_hit"]
         expect(events).to eq([{ metadata: { adapter: :memory }, result: nil }])
+      end
+
+      it "context.query.lookahead is working" do
+        request = perform_request(with_tracer: true)
+        expect(request.context.query.lookahead.selections.map(&:name)).to eql([:some_data])
+
+        request = perform_request(with_tracer: true, with_query: false)
+        expect(request.context.query.lookahead.selections.map(&:name)).to eql([:some_data])
       end
     end
 
@@ -148,6 +161,11 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
 
     it "returns data" do
       expect(subject).to eq([{ "data" => { "someData" => "some value" } }])
+    end
+
+    it "context.query.lookahead is working" do
+      query = subject.first
+      expect(query.context.query.lookahead.selections.map(&:name)).to eql([:some_data])
     end
   end
 
