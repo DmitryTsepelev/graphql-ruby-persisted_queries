@@ -26,7 +26,7 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisClientBuilder do
       end
 
       it "uses default db" do
-        expect(subject.connection[:id]).to eq("redis://127.0.0.1:6379/0")
+        expect(subject.connection[:id]).to eq("redis://127.0.0.1:6379")
       end
 
       context "when redis_db_name is configured" do
