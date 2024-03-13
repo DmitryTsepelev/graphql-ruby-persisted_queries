@@ -15,11 +15,30 @@ module GraphQL
           schema.singleton_class.prepend(SchemaPatch)
 
           if compiled_queries
-            schema.instrument :query, CompiledQueries::Instrumentation
+            configure_compiled_queries(schema)
           else
             schema.singleton_class.class_eval { alias_method :multiplex_original, :multiplex }
             schema.singleton_class.prepend(MultiplexPatch)
           end
+        end
+
+        private
+
+        def configure_compiled_queries(schema)
+          if graphql_ruby_after_2_2_5?
+            schema.trace_with(GraphQL::Tracing::LegacyHooksTrace)
+            schema.instance_exec { own_instrumenters[:query] << CompiledQueries::Instrumentation }
+          else
+            schema.instrument :query, CompiledQueries::Instrumentation
+          end
+        end
+
+        def graphql_ruby_after_2_2_5?
+          check_graphql_version "> 2.2.5"
+        end
+
+        def check_graphql_version(predicate)
+          Gem::Dependency.new("graphql", predicate).match?("graphql", GraphQL::VERSION)
         end
       end
 
