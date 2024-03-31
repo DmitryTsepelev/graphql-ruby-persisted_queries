@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.8.0 (2024-03-31)
+
 - [PR#73](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/73)
 Use trace_with instead of instrument for modern versions of graphql ([@DmitryTsepelev][])
 
