@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.8.1 (2024-06-01)
+
 - [PR#77](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/77)
 Fix serialization of Document (broken by [this change](https://github.com/rmosolgo/graphql-ruby/commit/7de7a1f98d4299abc1fb7deb5ca0ed2190867ab6)) ([@DmitryTsepelev][])
 
