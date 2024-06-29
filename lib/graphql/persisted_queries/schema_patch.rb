@@ -26,8 +26,7 @@ module GraphQL
 
         def configure_compiled_queries(schema)
           if graphql_ruby_after_2_2_5?
-            schema.trace_with(GraphQL::Tracing::LegacyHooksTrace)
-            schema.instance_exec { own_instrumenters[:query] << CompiledQueries::Instrumentation }
+            schema.trace_with(GraphQL::PersistedQueries::CompiledQueries::Instrumentation::Tracer)
           else
             schema.instrument :query, CompiledQueries::Instrumentation
           end
