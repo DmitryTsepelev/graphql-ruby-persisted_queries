@@ -19,6 +19,22 @@ module GraphQL
 
           def after_query(*); end
         end
+
+        # Instrumentations were deprecated in 2.2.5, this is a module to migrate to new interface
+        module Tracer
+          def execute_query(query:)
+            GraphQL::PersistedQueries::CompiledQueries::Instrumentation.before_query(query)
+            super
+          end
+
+          def execute_multiplex(multiplex:)
+            multiplex.queries.each do |query|
+              GraphQL::PersistedQueries::CompiledQueries::Instrumentation.before_query(query)
+            end
+
+            super
+          end
+        end
       end
     end
   end

@@ -2,6 +2,9 @@
 
 ## master
 
+- [PR#78](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/78)
+Migrate CompiledQueries instrumentation to tracer ([@DmitryTsepelev][])
+
 ## 1.8.1 (2024-06-01)
 
 - [PR#77](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/77)
