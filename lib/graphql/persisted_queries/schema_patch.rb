@@ -77,7 +77,10 @@ module GraphQL
       end
 
       def verify_http_method=(verify)
-        query_analyzer(prepare_analyzer) if verify
+        return unless verify
+
+        require "graphql/persisted_queries/analyzers/http_method_ast_analyzer"
+        query_analyzer(Analyzers::HttpMethodAstAnalyzer)
       end
 
       def persisted_queries_tracing_enabled?
@@ -91,18 +94,6 @@ module GraphQL
           # we need to set tracers both when this plugin gets initialized
           # and any time a tracer is added after initialization
           persisted_query_store.tracers = tracers if persisted_queries_tracing_enabled?
-        end
-      end
-
-      private
-
-      def prepare_analyzer
-        if using_ast_analysis?
-          require "graphql/persisted_queries/analyzers/http_method_ast_analyzer"
-          Analyzers::HttpMethodAstAnalyzer
-        else
-          require "graphql/persisted_queries/analyzers/http_method_analyzer"
-          Analyzers::HttpMethodAnalyzer.new
         end
       end
     end
