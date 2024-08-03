@@ -2,6 +2,8 @@
 
 ## master
 
+- [PR#79](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/79)
+Deprecate old ruby and gql versions ([@DmitryTsepelev][])
 - [PR#78](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/78)
 Migrate CompiledQueries instrumentation to tracer ([@DmitryTsepelev][])
 
