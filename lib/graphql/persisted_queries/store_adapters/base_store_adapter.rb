@@ -17,8 +17,11 @@ module GraphQL
           key = build_key(hash, compiled_query)
 
           fetch(key).tap do |result|
-            event = result ? "cache_hit" : "cache_miss"
-            trace("fetch_query.#{event}", adapter: @name)
+            if result
+              trace("fetch_query.cache_hit", adapter: @name) { result }
+            else
+              trace("fetch_query.cache_miss", adapter: @name)
+            end
           end
         end
 
