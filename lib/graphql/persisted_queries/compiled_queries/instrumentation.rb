@@ -8,6 +8,10 @@ module GraphQL
         class << self
           # Actions to perform before the query resolution
           def before_query(query)
+            if Gem::Dependency.new("graphql", ">= 2.5.6").match?("graphql", GraphQL::VERSION)
+              query = query.query if query.class.name == "GraphQL::Query::Partial"
+            end
+
             return unless query.context[:extensions]
 
             query.try_load_document!
