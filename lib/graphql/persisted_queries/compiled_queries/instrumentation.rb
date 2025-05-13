@@ -8,6 +8,8 @@ module GraphQL
         class << self
           # Actions to perform before the query resolution
           def before_query(query)
+            query = query.query if query.class.name == "GraphQL::Query::Partial"
+
             return unless query.context[:extensions]
 
             query.try_load_document!
