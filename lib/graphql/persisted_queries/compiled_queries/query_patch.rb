@@ -13,8 +13,9 @@ module GraphQL
           @persisted_query_not_found
         end
 
+        # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
         def prepare_ast
-          return super if @context[:extensions].nil? || @document
+          return super if !schema.compiled_queries? || @context[:extensions].nil? || @document
 
           try_load_document!
 
@@ -28,6 +29,7 @@ module GraphQL
             end
           end
         end
+        # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
         def try_load_document!
           return if @document || @persisted_document_not_found

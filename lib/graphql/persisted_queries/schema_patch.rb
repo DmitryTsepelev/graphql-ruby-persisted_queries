@@ -14,6 +14,10 @@ module GraphQL
         def patch(schema, compiled_queries)
           schema.singleton_class.prepend(SchemaPatch)
 
+          schema.singleton_class.define_method(:compiled_queries?) do
+            compiled_queries
+          end
+
           if compiled_queries
             configure_compiled_queries(schema)
           else
