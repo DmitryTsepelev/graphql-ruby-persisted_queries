@@ -1,6 +1,6 @@
 # Change log
 
-## 1.8.2 (2024-09-06)
+## 1.8.2 (2025-06-12)
 
 - [PR#79](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/79)
 Deprecate old ruby and gql versions ([@DmitryTsepelev][])
