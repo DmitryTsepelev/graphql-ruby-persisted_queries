@@ -16,15 +16,18 @@ module GraphQL
           compiled_query = options[:compiled_query] || false
           key = build_key(hash, compiled_query)
 
-          fetch(key).tap do |result|
-            event = result ? "cache_hit" : "cache_miss"
-            trace("fetch_query.#{event}", adapter: @name)
-          end
+          result = fetch(key)
+          event = result ? "cache_hit" : "cache_miss"
+          trace("fetch_query.#{event}", adapter: @name)
+
+          deserialize(result) if result
         end
 
         def save_query(hash, query, compiled_query: false)
           key = build_key(hash, compiled_query)
-          trace("save_query", adapter: @name) { save(key, query) }
+          trace("save_query", adapter: @name) do
+            query.tap { save(key, serialize(query)) }
+          end
         end
 
         def fetch(_hash)
@@ -42,6 +45,14 @@ module GraphQL
           elsif block_given?
             yield
           end
+        end
+
+        def serialize(query)
+          Marshal.dump(query)
+        end
+
+        def deserialize(serialized_query)
+          Marshal.load(serialized_query) # rubocop:disable Security/MarshalLoad
         end
 
         private
