@@ -92,6 +92,8 @@ It is possible to skip some parts of the query lifecycle for cases when query is
 
 An experimental tracing feature can be enabled by setting `tracing: true` when configuring the plugin. Read more about this feature in the [Tracing guide](docs/tracing.md).
 
+You can skip marshalling for queries stored in memory by passing the `marshal_inmemory_queries: false` option. This only affects the `memory` and `redis_with_local_cache` stores.
+
 > 📖 Read more about the gem internals: [Persisted queries in GraphQL:
 Slim down Apollo requests to your Ruby application](https://evilmartians.com/chronicles/persisted-queries-in-graphql-slim-down-apollo-requests-to-your-ruby-application)
 

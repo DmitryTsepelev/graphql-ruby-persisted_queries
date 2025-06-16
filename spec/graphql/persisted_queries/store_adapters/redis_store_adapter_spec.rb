@@ -94,4 +94,20 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisStoreAdapter do
       )
     end
   end
+
+  describe "interaction with underlying client" do
+    let(:key) { "key" }
+    let(:value) { "value" }
+
+    let(:redis_client) { proc { |&block| block.call(redis_client_stub) } }
+    let(:redis_client_stub) { instance_double(Redis, set: true, get: Marshal.dump(value)) }
+
+    specify do
+      subject.save(key, value)
+
+      expect(redis_client_stub).to have_received(:set).once
+      expect(subject.fetch(key)).to eq(value)
+      expect(redis_client_stub).to have_received(:get).with(end_with(key)).once
+    end
+  end
 end

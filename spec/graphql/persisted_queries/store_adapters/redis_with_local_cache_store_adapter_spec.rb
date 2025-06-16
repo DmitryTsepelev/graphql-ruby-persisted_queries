@@ -21,13 +21,15 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
     allow(klass).to receive(:new).and_return(mock_memory_adapter)
     klass
   end
+  let(:marshal_inmemory_queries) { true }
   let(:options) do
     {
       redis_client: redis_client,
       expiration: nil,
       namespace: nil,
       redis_adapter_class: redis_adapter_class,
-      memory_adapter_class: memory_adapter_class
+      memory_adapter_class: memory_adapter_class,
+      marshal_inmemory_queries: marshal_inmemory_queries
     }
   end
 
@@ -134,6 +136,18 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::RedisWithLocalCacheStor
   end
 
   context "when saving queries" do
+    it "dispatches to both adapters" do
+      expect(mock_memory_adapter).to \
+        receive(:save).with("#{versioned_key_prefix}:abc123", "result!")
+
+      expect(mock_redis_adapter).to \
+        receive(:save).with("#{versioned_key_prefix}:abc123", "result!")
+
+      subject.save_query("abc123", "result!")
+    end
+  end
+
+  describe "interaction with underlying adapters" do
     it "dispatches to both adapters" do
       expect(mock_memory_adapter).to \
         receive(:save).with("#{versioned_key_prefix}:abc123", "result!")

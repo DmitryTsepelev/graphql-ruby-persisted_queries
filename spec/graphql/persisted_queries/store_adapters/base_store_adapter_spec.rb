@@ -19,6 +19,14 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::BaseStoreAdapter do
     def save(hash, query)
       @storage[hash] = query
     end
+
+    def serialize(query)
+      query
+    end
+
+    def deserialize(serialized_query)
+      serialized_query
+    end
   end
 
   let(:storage) { {} }
