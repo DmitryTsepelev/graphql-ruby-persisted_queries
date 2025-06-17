@@ -8,8 +8,9 @@ module GraphQL
         DEFAULT_REDIS_ADAPTER_CLASS = RedisStoreAdapter
         DEFAULT_MEMORY_ADAPTER_CLASS = MemoryStoreAdapter
 
+        # rubocop:disable Metrics/ParameterLists
         def initialize(redis_client: {}, expiration: nil, namespace: nil, redis_adapter_class: nil,
-                       memory_adapter_class: nil)
+                       memory_adapter_class: nil, marshal_query: true)
           redis_adapter_class ||= DEFAULT_REDIS_ADAPTER_CLASS
           memory_adapter_class ||= DEFAULT_MEMORY_ADAPTER_CLASS
 
@@ -18,9 +19,10 @@ module GraphQL
             expiration: expiration,
             namespace: namespace
           )
-          @memory_adapter = memory_adapter_class.new
+          @memory_adapter = memory_adapter_class.new(marshal_query: marshal_query)
           @name = :redis_with_local_cache
         end
+        # rubocop:enable Metrics/ParameterLists
 
         def fetch(hash)
           result = @memory_adapter.fetch(hash)
@@ -35,6 +37,14 @@ module GraphQL
         def save(hash, query)
           @redis_adapter.save(hash, query)
           @memory_adapter.save(hash, query)
+        end
+
+        def serialize(query)
+          query
+        end
+
+        def deserialize(serialized_query)
+          serialized_query
         end
 
         private

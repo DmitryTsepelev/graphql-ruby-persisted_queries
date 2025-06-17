@@ -38,8 +38,7 @@ module GraphQL
           return if hash.nil?
 
           with_error_handling do
-            compiled_query = @schema.persisted_query_store.fetch_query(hash, compiled_query: true)
-            Marshal.load(compiled_query) if compiled_query # rubocop:disable Security/MarshalLoad
+            @schema.persisted_query_store.fetch_query(hash, compiled_query: true)
           end
         end
 
@@ -50,7 +49,7 @@ module GraphQL
 
           with_error_handling do
             @schema.persisted_query_store.save_query(
-              hash, Marshal.dump(compiled_query), compiled_query: true
+              hash, compiled_query, compiled_query: true
             )
           end
         end
