@@ -32,8 +32,6 @@ module GraphQL
         end
 
         # rubocop: disable Metrics/MethodLength
-        # rubocop: disable Metrics/CyclomaticComplexity
-        # rubocop: disable Metrics/PerceivedComplexity
         def build_redis_proc(redis_client)
           if redis_client.is_a?(Hash)
             build_redis_proc(RedisClientBuilder.new(**redis_client).build)
@@ -48,8 +46,6 @@ module GraphQL
           end
         end
         # rubocop: enable Metrics/MethodLength
-        # rubocop: enable Metrics/CyclomaticComplexity
-        # rubocop: enable Metrics/PerceivedComplexity
       end
     end
   end

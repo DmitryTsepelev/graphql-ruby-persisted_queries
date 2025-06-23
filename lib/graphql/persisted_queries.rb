@@ -15,7 +15,7 @@ require "graphql/persisted_queries/compiled_queries/query_patch"
 module GraphQL
   # Plugin definition
   module PersistedQueries
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     def self.use(schema_defn, **options)
       schema = schema_defn.is_a?(Class) ? schema_defn : schema_defn.target
 
@@ -35,7 +35,7 @@ module GraphQL
       store = options.delete(:store) || :memory
       schema.configure_persisted_query_store(store, **options)
     end
-    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     def self.configure_compiled_queries
       if Gem::Dependency.new("graphql", "< 1.12.0").match?("graphql", GraphQL::VERSION)

@@ -108,7 +108,6 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       end
 
       it "calls the error handler" do
-        # rubocop: disable Lint/HandleExceptions
         begin
           schema.execute(
             query,
@@ -117,8 +116,6 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
         rescue RuntimeError
           # Ignore the expected error
         end
-        # rubocop: enable Lint/HandleExceptions
-
         expect(
           schema.persisted_query_error_handler.last_handled_error
         ).to be_a(RuntimeError)
@@ -181,9 +178,9 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
       end
 
       context "when store is custom" do
-        # rubocop:disable Metrics/LineLength
+        # rubocop:disable Layout/LineLength
         class CustomMemoryStoreAdapter < GraphQL::PersistedQueries::StoreAdapters::MemoryStoreAdapter; end
-        # rubocop:enable Metrics/LineLength
+        # rubocop:enable Layout/LineLength
 
         let(:schema) do
           build_test_schema(store: CustomMemoryStoreAdapter.new)

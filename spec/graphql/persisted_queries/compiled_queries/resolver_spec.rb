@@ -67,14 +67,11 @@ RSpec.describe GraphQL::PersistedQueries::CompiledQueries::Resolver,
       end
 
       it "passes the error to the error handler" do
-        # rubocop: disable Lint/HandleExceptions
         begin
           subject
         rescue GraphQL::PersistedQueries::Resolver::NotFound
           # Ignore the expected error
         end
-        # rubocop: enable Lint/HandleExceptions
-
         expect(error_handler).to have_received(:call).with(error)
       end
     end
