@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   TargetRubyVersion: 2.6
   Include:
@@ -15,7 +17,7 @@ AllCops:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
 
 Metrics/BlockLength:
@@ -24,3 +26,10 @@ Metrics/BlockLength:
 
 Style/NumericLiterals:
   Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - spec/**/*

@@ -8,7 +8,7 @@ module GraphQL
         class << self
           # Actions to perform before the query resolution
           def before_query(query)
-            query = query.query if query.class.name == "GraphQL::Query::Partial"
+            query = query.query if query.class.name == "GraphQL::Query::Partial" # rubocop:disable Style/ClassEqualityComparison
 
             return unless query.context[:extensions]
 

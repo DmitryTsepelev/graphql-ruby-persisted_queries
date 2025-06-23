@@ -13,6 +13,7 @@ module GraphQL
           @persisted_query_not_found
         end
 
+        # rubocop:disable Metrics/CyclomaticComplexity
         def prepare_ast
           return super if @context[:extensions].nil? || @document
 
@@ -27,6 +28,7 @@ module GraphQL
               resolver.persist(query_string, @document)
             end
           end
+          # rubocop:enable Metrics/CyclomaticComplexity
         end
 
         def try_load_document!

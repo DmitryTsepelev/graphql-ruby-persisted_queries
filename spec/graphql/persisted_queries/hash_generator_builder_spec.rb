@@ -10,7 +10,7 @@ RSpec.describe GraphQL::PersistedQueries::HashGeneratorBuilder do
     subject { described_class.new(generator).build }
 
     context "when lambda is passed" do
-      let(:generator) { proc { |value| value + "_hashed" } }
+      let(:generator) { proc { |value| "#{value}_hashed" } }
 
       it { is_expected.to be_kind_of(Proc) }
 
