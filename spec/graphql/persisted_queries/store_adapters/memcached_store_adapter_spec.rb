@@ -85,4 +85,20 @@ RSpec.describe GraphQL::PersistedQueries::StoreAdapters::MemcachedStoreAdapter d
       )
     end
   end
+
+  describe "interaction with underlying client" do
+    let(:key) { "key" }
+    let(:value) { "value" }
+
+    let(:dalli_client) { proc { |&block| block.call(dalli_client_stub) } }
+    let(:dalli_client_stub) { instance_double(Dalli::Client, set: true, get: Marshal.dump(value)) }
+
+    specify do
+      subject.save(key, value)
+
+      expect(dalli_client_stub).to have_received(:set).once
+      expect(subject.fetch(key)).to eq(value)
+      expect(dalli_client_stub).to have_received(:get).with(end_with(key)).once
+    end
+  end
 end

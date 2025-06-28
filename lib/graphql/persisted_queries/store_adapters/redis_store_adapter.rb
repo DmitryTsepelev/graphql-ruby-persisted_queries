@@ -18,11 +18,13 @@ module GraphQL
         end
 
         def fetch(hash)
-          @redis_proc.call { |redis| redis.get(key_for(hash)) }
+          @redis_proc.call do |redis|
+            deserialize(redis.get(key_for(hash)))
+          end
         end
 
         def save(hash, query)
-          @redis_proc.call { |redis| redis.set(key_for(hash), query, ex: @expiration) }
+          @redis_proc.call { |redis| redis.set(key_for(hash), serialize(query), ex: @expiration) }
         end
 
         private

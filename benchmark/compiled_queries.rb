@@ -17,6 +17,12 @@ class GraphqlSchema < GraphQL::Schema
   query QueryType
 end
 
+class GraphqlSchemaWithoutMarshalling < GraphQL::Schema
+  use GraphQL::PersistedQueries, compiled_queries: true, marshal_inmemory_queries: false
+
+  query QueryType
+end
+
 GraphqlSchema.to_definition
 
 puts
@@ -32,9 +38,14 @@ Benchmark.bm(28) do |x|
       context = { extensions: { "persistedQuery" => { "sha256Hash" => sha256 } } }
       # warmup
       GraphqlSchema.execute(query, context: context)
+      GraphqlSchemaWithoutMarshalling.execute(query, context: context)
 
-      x.report("#{field_count} fields#{" (nested)" if with_nested}") do
+      x.report("#{field_count} fields#{' (nested)' if with_nested} (marshalled)") do
         GraphqlSchema.execute(query, context: context)
+      end
+
+      x.report("#{field_count} fields#{' (nested)' if with_nested}") do
+        GraphqlSchemaWithoutMarshalling.execute(query, context: context)
       end
     end
   end

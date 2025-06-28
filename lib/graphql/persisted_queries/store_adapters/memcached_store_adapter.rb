@@ -18,11 +18,11 @@ module GraphQL
         end
 
         def fetch(hash)
-          @dalli_proc.call { |dalli| dalli.get(key_for(hash)) }
+          @dalli_proc.call { |dalli| deserialize(dalli.get(key_for(hash))) }
         end
 
         def save(hash, query)
-          @dalli_proc.call { |dalli| dalli.set(key_for(hash), query, @expiration) }
+          @dalli_proc.call { |dalli| dalli.set(key_for(hash), serialize(query), @expiration) }
         end
 
         private

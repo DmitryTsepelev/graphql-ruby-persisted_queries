@@ -8,7 +8,7 @@ RSpec.describe GraphQL::PersistedQueries::CompiledQueries::Resolver,
   let(:query_str) { query }
   let(:extensions) { {} }
   let(:parsed_query) { GraphQL.parse(query) }
-  let(:compiled_query) { Marshal.dump(parsed_query) }
+  let(:compiled_query) { parsed_query }
   let(:store) do
     double("TestStore").tap do |store|
       allow(store).to receive(:save_query)
