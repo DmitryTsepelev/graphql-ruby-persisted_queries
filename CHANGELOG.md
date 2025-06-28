@@ -1,5 +1,10 @@
 # Change log
 
+## 2.0.0 (2025-06-28)
+
+- [PR#87](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/87)
+[[BREAKING](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/87#issuecomment-3008620281)] Add option to skip query marshalling for in-memory storage ([@viralpraxis][])
+
 ## 1.8.2 (2025-06-12)
 
 - [PR#79](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/79)
@@ -134,3 +139,4 @@ Handle situations when prepare_ast happens before instrumentation ([@DmitryTsepe
 [@rbviz]: https://github.com/rbviz
 [@louim]: https://github.com/louim
 [@mpospelov]: https://github.com/mpospelov
+[@viralpraxis]: https://github.com/viralpraxis
