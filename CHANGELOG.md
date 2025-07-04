@@ -22,6 +22,9 @@ Fix serialization of Document (broken by [this change](https://github.com/rmosol
 - [PR#73](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/73)
 Use trace_with instead of instrument for modern versions of graphql ([@DmitryTsepelev][])
 
+- [PR#64](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/64)
+Add query to cache_hit trace event ([@DmitryTsepelev][])
+
 ## 1.7.0 (2023-02-02)
 
 - [PR#62](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/62)

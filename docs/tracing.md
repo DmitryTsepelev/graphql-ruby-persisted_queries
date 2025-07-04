@@ -30,7 +30,7 @@ class MyPersistedQueriesTracer
       case key
       when "persisted_queries.fetch_query.cache_hit"
         # data = { adapter: :redis }
-        # result = nil
+        # result = query string that got hit
         # increment a counter metric to track cache hits
       when "persisted_queries.fetch_query.cache_miss"
         # data = { adapter: :redis }

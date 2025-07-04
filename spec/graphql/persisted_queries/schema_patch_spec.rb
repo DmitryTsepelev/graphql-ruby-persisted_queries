@@ -79,7 +79,7 @@ RSpec.describe GraphQL::PersistedQueries::SchemaPatch do
         perform_request(with_tracer: true)
         perform_request(with_tracer: true, with_query: false)
         events = tracer.events["persisted_queries.fetch_query.cache_hit"]
-        expect(events).to eq([{ metadata: { adapter: :memory }, result: nil }])
+        expect(events).to eq([{ metadata: { adapter: :memory }, result: query }])
       end
     end
 
