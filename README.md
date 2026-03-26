@@ -12,7 +12,10 @@ Used in production by:
 - Toptal
 - _Want to be here? Let me know_ 🙂
 
-You can support my open–source work [here](https://boosty.to/dmitry_tsepelev).
+## Professional Support
+
+Need help with your GraphQL API architecture, schema design, or performance?
+I'm available for consulting — [get in touch](https://dmitrytsepelev.dev/consulting).
 
 ## Getting started
 
