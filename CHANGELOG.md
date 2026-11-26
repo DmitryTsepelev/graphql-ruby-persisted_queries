@@ -1,5 +1,10 @@
 # Change log
 
+## master
+
+- [PR#89](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/89)
+Rename `ResolverHelpers#hash` to `query_hash` so it no longer overrides `Module#hash` and `Object#hash` ([@andrewmarkle][])
+
 ## 2.0.0 (2025-06-28)
 
 - [PR#87](https://github.com/DmitryTsepelev/graphql-ruby-persisted_queries/pull/87)
@@ -140,3 +145,4 @@ Handle situations when prepare_ast happens before instrumentation ([@DmitryTsepe
 [@louim]: https://github.com/louim
 [@mpospelov]: https://github.com/mpospelov
 [@viralpraxis]: https://github.com/viralpraxis
+[@andrewmarkle]: https://github.com/andrewmarkle
