@@ -12,12 +12,14 @@ module GraphQL
       end
 
       def resolve(query_string)
-        return query_string if hash.nil?
+        return query_string if query_hash.nil?
 
         if query_string
           persist_query(query_string)
         else
-          query_string = with_error_handling { @schema.persisted_query_store.fetch_query(hash) }
+          query_string = with_error_handling do
+            @schema.persisted_query_store.fetch_query(query_hash)
+          end
           raise GraphQL::PersistedQueries::NotFound if query_string.nil?
         end
 
@@ -29,7 +31,7 @@ module GraphQL
       def persist_query(query_string)
         validate_hash!(query_string)
 
-        with_error_handling { @schema.persisted_query_store.save_query(hash, query_string) }
+        with_error_handling { @schema.persisted_query_store.save_query(query_hash, query_string) }
       end
     end
   end

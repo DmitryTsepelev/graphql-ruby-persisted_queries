@@ -35,21 +35,21 @@ module GraphQL
         end
 
         def fetch
-          return if hash.nil?
+          return if query_hash.nil?
 
           with_error_handling do
-            @schema.persisted_query_store.fetch_query(hash, compiled_query: true)
+            @schema.persisted_query_store.fetch_query(query_hash, compiled_query: true)
           end
         end
 
         def persist(query_string, compiled_query)
-          return if hash.nil?
+          return if query_hash.nil?
 
           validate_hash!(query_string)
 
           with_error_handling do
             @schema.persisted_query_store.save_query(
-              hash, compiled_query, compiled_query: true
+              query_hash, compiled_query, compiled_query: true
             )
           end
         end

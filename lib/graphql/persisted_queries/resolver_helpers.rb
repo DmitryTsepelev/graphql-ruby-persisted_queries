@@ -13,13 +13,13 @@ module GraphQL
       end
 
       def validate_hash!(query_string)
-        return if @schema.hash_generator_proc.call(query_string) == hash
+        return if @schema.hash_generator_proc.call(query_string) == query_hash
 
         raise GraphQL::PersistedQueries::WrongHash
       end
 
-      def hash
-        @hash ||= @extensions.dig("persistedQuery", "sha256Hash")
+      def query_hash
+        @query_hash ||= @extensions.dig("persistedQuery", "sha256Hash")
       end
     end
   end
